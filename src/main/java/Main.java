@@ -3,6 +3,7 @@ import ec.edu.ups.poo.models.Producto;
 import ec.edu.ups.poo.models.ProductoConIva;
 import ec.edu.ups.poo.models.ProductoSinIva;
 import ec.edu.ups.poo.models.Provedor;
+import ec.edu.ups.poo.views.VentanaAgregarProveedor;
 import ec.edu.ups.poo.views.VentanaListarProducto;
 import ec.edu.ups.poo.views.VentanaListarProveedor;
 
@@ -61,8 +62,9 @@ public class Main {
         productos.add(producto8);
 
 
-        VentanaListarProveedor ventanaListarProveedor = new VentanaListarProveedor(provedores);
-        VentanaListarProducto ventanaListarProducto = new VentanaListarProducto(productos);
 
+        VentanaListarProducto ventanaListarProducto = new VentanaListarProducto(productos);
+        VentanaAgregarProveedor ventanaAgregarProveedor = new VentanaAgregarProveedor(provedores);
+        VentanaListarProveedor ventanaListarProveedor = new VentanaListarProveedor(provedores);
     }
 }
