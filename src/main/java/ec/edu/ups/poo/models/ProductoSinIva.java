@@ -18,11 +18,10 @@ public class ProductoSinIva extends  Producto {
 
     @Override
     public String toString() {
-        return "\n\t\t\t\t\t\t\t\tProducto Sin IVA {" +
+        return "Producto Sin IVA {" +
                 super.toString() +
                 " || porcantajeIVA= " + calcularIVA() +
-                " || motivo='" + motivo + '\''+ " ||"+
-                "\n\t\t\t\t\t\t----------------------------------------------------------------------------------------------------------";
+                " || motivo='" + motivo + '\''+ " ||";
     }
 
     public double calcularIVA() {

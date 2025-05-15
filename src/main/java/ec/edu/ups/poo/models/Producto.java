@@ -48,7 +48,7 @@ public abstract class  Producto {
 
     @Override
     public String toString() {
-        return "\n\t\t\t\t\t\t\t\t|| id=" + id +
+        return "|| id=" + id +
                 " || nombre='" + nombre + '\'' +
                 " || precioUnitario=" + precioUnitario +
                 " || marca='" + marca + '\'';

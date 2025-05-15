@@ -16,6 +16,14 @@ public class Provedor extends Persona{
         return productos;
     }
 
+    public String getNombreProductos() {
+        String nombres = "";
+        for (Producto producto : productos) {
+            nombres = nombres + " " + producto.getNombre() + "(" + producto.getMarca()+ ")" + ", ";
+        }
+        return nombres;
+    }
+
     public void addProducto(Producto producto) {
         this.productos.add(producto);
     }
