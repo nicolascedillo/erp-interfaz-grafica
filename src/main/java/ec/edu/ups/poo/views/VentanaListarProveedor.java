@@ -20,6 +20,7 @@ public class VentanaListarProveedor {
     public VentanaListarProveedor(List<Provedor> proveedores) {
         this.proveedores = proveedores;
 
+
         frame = new Frame("Lista de Proveedores");
         frame.setSize(800, 600);
         frame.setLayout(new BorderLayout());
@@ -33,7 +34,6 @@ public class VentanaListarProveedor {
         ScrollPane scrollPane = new ScrollPane (ScrollPane.SCROLLBARS_AS_NEEDED);
         scrollPane.setSize(580, 350);
         panelPrincipal.setPreferredSize(new Dimension(560, proveedores.size() * 160));
-
         for (Provedor provedor: proveedores) {
             Panel panel = new Panel(new GridLayout(0, 2));
             panel.setPreferredSize(new Dimension(700,180));

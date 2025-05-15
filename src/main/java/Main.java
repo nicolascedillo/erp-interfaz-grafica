@@ -1,7 +1,9 @@
 import ec.edu.ups.poo.models.Enums.Feriado;
+import ec.edu.ups.poo.models.Producto;
 import ec.edu.ups.poo.models.ProductoConIva;
 import ec.edu.ups.poo.models.ProductoSinIva;
 import ec.edu.ups.poo.models.Provedor;
+import ec.edu.ups.poo.views.VentanaListarProducto;
 import ec.edu.ups.poo.views.VentanaListarProveedor;
 
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ public class Main {
     public static void main(String[] args) {
 
         List<Provedor> provedores = new ArrayList<>();
+        List<Producto> productos = new ArrayList<>();
         ProductoConIva producto1 = new ProductoConIva(1, "Computadora",  500.0,"ASUS", Feriado.NO_FERIADO);
         ProductoSinIva producto2 = new ProductoSinIva(2,"Sal",2.0,"Mi Sal Querida", "El producto no agraba iva");
         ProductoConIva producto3 = new ProductoConIva(3, "Smartphone", 300.0, "Samsung", Feriado.ANIO_NUEVO);
@@ -39,7 +42,6 @@ public class Main {
         provedores.add(provedor7);
         provedores.add(provedor8);
 
-
         provedor.addProducto(producto1);
         provedor2.addProducto(producto2);
         provedor3.addProducto(producto3);
@@ -49,7 +51,18 @@ public class Main {
         provedor7.addProducto(producto7);
         provedor8.addProducto(producto8);
 
+        productos.add(producto1);
+        productos.add(producto2);
+        productos.add(producto3);
+        productos.add(producto4);
+        productos.add(producto5);
+        productos.add(producto6);
+        productos.add(producto7);
+        productos.add(producto8);
+
+
         VentanaListarProveedor ventanaListarProveedor = new VentanaListarProveedor(provedores);
+        VentanaListarProducto ventanaListarProducto = new VentanaListarProducto(productos);
 
     }
 }
