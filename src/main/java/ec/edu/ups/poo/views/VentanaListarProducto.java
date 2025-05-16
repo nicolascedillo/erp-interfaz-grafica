@@ -96,5 +96,4 @@ public class VentanaListarProducto {
         frame.add(scrollPane, BorderLayout.CENTER);
         frame.setVisible(true);
     }
-
 }

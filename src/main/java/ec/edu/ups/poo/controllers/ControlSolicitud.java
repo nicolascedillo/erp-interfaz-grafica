@@ -16,38 +16,7 @@ public class ControlSolicitud {
     public ControlSolicitud() {
         solicitudes = new ArrayList<>();
 
-        Departamento departamento = new Departamento("Sistemas");
 
-        Empleado empleado = new Empleado("0107456022","Nicolás","Cedillo","099 181 9287","Calle de la verbena","nicocedillo@gmail.com",departamento, Rol.EMPLEADOR,"nicolascedillo@gmail.com","nicolas1");
-
-        ControlProducto cPro= new ControlProducto();
-
-        GregorianCalendar fecha = new GregorianCalendar(2018, Calendar.JUNE, 15);
-        SolicitudCompra solicitud1 = new SolicitudCompra(1,fecha,"Compras pendientes",empleado, EstadoSolicitud.SOLICITADA);
-        solicitud1.addDetalle(1, cPro.getProductos(1), 5, "---Sin Observaciones---");
-        solicitud1.addDetalle(2, cPro.getProductos(2), 5, "Es marina");
-
-        SolicitudCompra solicitud2 = new SolicitudCompra(2, fecha, "Equipos de oficina", empleado, EstadoSolicitud.APROVADA);
-        solicitud2.addDetalle(1, cPro.getProductos(3), 2, "Entrega urgente");
-        solicitud2.addDetalle(2, cPro.getProductos(4), 1, "Modelo 2023");
-
-        SolicitudCompra solicitud3 = new SolicitudCompra(3, fecha, "Artículos de cocina", empleado, EstadoSolicitud.EN_REVISION);
-        solicitud3.addDetalle(1, cPro.getProductos(5), 10, "Uso institucional");
-        solicitud3.addDetalle(2, cPro.getProductos(6), 15, "Preferencia marca reconocida");
-
-        SolicitudCompra solicitud4 = new SolicitudCompra(4, fecha, "Mantenimiento informático", empleado, EstadoSolicitud.RECHAZADA);
-        solicitud4.addDetalle(1, cPro.getProductos(7), 3, "Actualizar inventario");
-        solicitud4.addDetalle(2, cPro.getProductos(8), 2, "Para reposición");
-
-        SolicitudCompra solicitud5 = new SolicitudCompra(5, fecha, "Papelería", empleado, EstadoSolicitud.SOLICITADA);
-        solicitud5.addDetalle(1, cPro.getProductos(1), 50, "Material de oficina");
-        solicitud5.addDetalle(2, cPro.getProductos(5), 20, "Uso diario");
-
-        solicitudes.add(solicitud1);
-        solicitudes.add(solicitud2);
-        solicitudes.add(solicitud3);
-        solicitudes.add(solicitud4);
-        solicitudes.add(solicitud5);
 
     }
 

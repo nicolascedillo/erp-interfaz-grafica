@@ -1,13 +1,14 @@
+import ec.edu.ups.poo.controllers.ControlProducto;
+import ec.edu.ups.poo.models.*;
+import ec.edu.ups.poo.models.Enums.EstadoSolicitud;
 import ec.edu.ups.poo.models.Enums.Feriado;
-import ec.edu.ups.poo.models.Producto;
-import ec.edu.ups.poo.models.ProductoConIva;
-import ec.edu.ups.poo.models.ProductoSinIva;
-import ec.edu.ups.poo.models.Provedor;
-import ec.edu.ups.poo.views.VentanaAgregarProveedor;
-import ec.edu.ups.poo.views.VentanaListarProducto;
-import ec.edu.ups.poo.views.VentanaListarProveedor;
+import ec.edu.ups.poo.models.Enums.Rol;
+import ec.edu.ups.poo.views.*;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Main {
@@ -15,6 +16,7 @@ public class Main {
 
         List<Provedor> provedores = new ArrayList<>();
         List<Producto> productos = new ArrayList<>();
+        List<SolicitudCompra> solicitudes = new ArrayList<>();
         ProductoConIva producto1 = new ProductoConIva(1, "Computadora",  500.0,"ASUS", Feriado.NO_FERIADO);
         ProductoSinIva producto2 = new ProductoSinIva(2,"Sal",2.0,"Mi Sal Querida", "El producto no agraba iva");
         ProductoConIva producto3 = new ProductoConIva(3, "Smartphone", 300.0, "Samsung", Feriado.ANIO_NUEVO);
@@ -61,10 +63,50 @@ public class Main {
         productos.add(producto7);
         productos.add(producto8);
 
+        Departamento departamento = new Departamento("Sistemas");
 
+        Empleado empleado = new Empleado("0107456022","Nicolás","Cedillo","099 181 9287","Calle de la verbena","nicocedillo@gmail.com",departamento, Rol.EMPLEADOR,"nicolascedillo@gmail.com","nicolas1");
+
+        ControlProducto cPro= new ControlProducto();
+
+        GregorianCalendar fecha = new GregorianCalendar(2018, Calendar.JUNE, 15);
+        SolicitudCompra solicitud1 = new SolicitudCompra(1,fecha,"Compras pendientes",empleado, EstadoSolicitud.SOLICITADA);
+        solicitud1.addDetalle(1, cPro.getProductos(1), 5, "---Sin Observaciones---");
+        solicitud1.addDetalle(2, cPro.getProductos(2), 5, "Es marina");
+
+        SolicitudCompra solicitud2 = new SolicitudCompra(2, fecha, "Equipos de oficina", empleado, EstadoSolicitud.APROVADA);
+        solicitud2.addDetalle(1, cPro.getProductos(3), 2, "Entrega urgente");
+        solicitud2.addDetalle(2, cPro.getProductos(4), 1, "Modelo 2023");
+
+        SolicitudCompra solicitud3 = new SolicitudCompra(3, fecha, "Artículos de cocina", empleado, EstadoSolicitud.EN_REVISION);
+        solicitud3.addDetalle(1, cPro.getProductos(5), 10, "Uso institucional");
+        solicitud3.addDetalle(2, cPro.getProductos(6), 15, "Preferencia marca reconocida");
+
+        SolicitudCompra solicitud4 = new SolicitudCompra(4, fecha, "Mantenimiento informático", empleado, EstadoSolicitud.RECHAZADA);
+        solicitud4.addDetalle(1, cPro.getProductos(7), 3, "Actualizar inventario");
+        solicitud4.addDetalle(2, cPro.getProductos(8), 2, "Para reposición");
+
+        SolicitudCompra solicitud5 = new SolicitudCompra(5, fecha, "Papelería", empleado, EstadoSolicitud.SOLICITADA);
+        solicitud5.addDetalle(1, cPro.getProductos(1), 50, "Material de oficina");
+        solicitud5.addDetalle(2, cPro.getProductos(5), 20, "Uso diario");
+
+        solicitudes.add(solicitud1);
+        solicitudes.add(solicitud2);
+        solicitudes.add(solicitud3);
+        solicitudes.add(solicitud4);
+        solicitudes.add(solicitud5);
+
+
+        Frame frame = new Frame("Sistema ERP");
+        Panel panelPrincipal = new Panel(new BorderLayout());
+        Panel panelSuperior = new Panel();
+        Label titulo = new Label("Siste de gestion ERP");
+        titulo.setFont(new Font("Arial", Font.BOLD, 18));
 
         VentanaListarProducto ventanaListarProducto = new VentanaListarProducto(productos);
         VentanaAgregarProveedor ventanaAgregarProveedor = new VentanaAgregarProveedor(provedores);
         VentanaListarProveedor ventanaListarProveedor = new VentanaListarProveedor(provedores);
+        VentanaLogIn ventanaLogIn = new VentanaLogIn();
+        VentanaListarSolicitud ventanaListarSolicitud = new VentanaListarSolicitud(solicitudes);
     }
 }
