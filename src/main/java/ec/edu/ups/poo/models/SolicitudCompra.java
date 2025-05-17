@@ -60,6 +60,10 @@ public class SolicitudCompra implements Calculable {
         calcularSubTotal();
     }
 
+    public List<DetalleSolicitud> getDetalles() {
+        return detalles;
+    }
+
     public EstadoSolicitud getEstado() {
         return estado;
     }
@@ -86,6 +90,11 @@ public class SolicitudCompra implements Calculable {
 
     public GregorianCalendar getFecha() {
         return fecha;
+    }
+
+    public String getStringFecha (){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(fecha.getTime());
     }
 
     public void setFecha(GregorianCalendar fecha) {

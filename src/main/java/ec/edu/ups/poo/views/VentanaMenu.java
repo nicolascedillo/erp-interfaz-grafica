@@ -12,21 +12,26 @@ public class VentanaMenu extends Frame {
     private Button btnRegresar;
 
     public VentanaMenu() {
+        Datos datos = new Datos();
         Panel panel = new Panel();
-        panel.setLayout(new GridLayout(4, 1, 10, 10));
+        panel.setLayout(new GridLayout(4, 1));
 
-        setTitle("Menú Administrador");
+        setTitle("Menú");
         setSize(800, 600);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
+        Label titulo = new Label("Menú del sistema");
+        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        add(titulo, BorderLayout.NORTH);
 
+        Panel panelBotonListarProductos = new Panel(new FlowLayout());
         btnListarProductos = new Button("Listar Productos");
         btnListarProductos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VentanaListarProducto ventanaListarProducto = new VentanaListarProducto();
-                ventanaListarProducto.setVisible(true);
+                VentanaListarProducto ventanaListarProducto = new VentanaListarProducto(datos.getProductos());
                 dispose();
+
             }
         });
 
@@ -34,9 +39,9 @@ public class VentanaMenu extends Frame {
         btnListarProvedores.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VentanaListarProveedor ventanaListarProveedor = new VentanaListarProveedor();
-                ventanaListarProveedor.setVisible(true);
+                VentanaListarProveedor ventanaListarProveedor = new VentanaListarProveedor(datos.getProvedores());
                 dispose();
+
             }
         });
 
@@ -44,8 +49,7 @@ public class VentanaMenu extends Frame {
         btnListarSolicitudesCompras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VentanaListarSolicitud ventanaListarSolicitud = new VentanaListarSolicitud();
-                ventanaListarSolicitud.setVisible(true);
+                VentanaListarSolicitud ventanaListarSolicitud = new VentanaListarSolicitud(datos.getSolicitudes());
                 dispose();
             }
         });

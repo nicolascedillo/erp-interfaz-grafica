@@ -4,6 +4,8 @@ import ec.edu.ups.poo.models.Producto;
 import ec.edu.ups.poo.models.ProductoConIva;
 import ec.edu.ups.poo.models.ProductoSinIva;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.*;
 
@@ -34,7 +36,18 @@ public class VentanaListarProducto {
         Panel panelPrincipal = new Panel(new FlowLayout(FlowLayout.LEFT));
         Label titulo = new Label("Listar Productos");
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
-        frame.add(titulo, BorderLayout.NORTH);
+        Panel panelSuperior = new Panel(new FlowLayout());
+        panelSuperior.add(titulo);
+        Button botonSalir = new  Button("Salir");
+        panelSuperior.add(botonSalir);
+        botonSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                VentanaMenu ventanaMenu = new VentanaMenu();
+            }
+        });
+        frame.add(panelSuperior, BorderLayout.NORTH);
 
         ScrollPane scrollPane = new ScrollPane (ScrollPane.SCROLLBARS_AS_NEEDED);
         scrollPane.setSize(580, 350);
