@@ -9,12 +9,15 @@ public class VentanaMenu extends Frame {
     private Button btnListarProductos;
     private Button btnListarProvedores;
     private Button btnListarSolicitudesCompras;
+    private Button btnBuscarProveedorPorId;
+    private Button btnBuscarProveedorPorNombre;
+    private Button btnBuscarSolicitudes;
     private Button btnRegresar;
 
     public VentanaMenu() {
         Datos datos = new Datos();
         Panel panel = new Panel();
-        panel.setLayout(new GridLayout(4, 1));
+        panel.setLayout(new GridLayout(6, 1));
 
         setTitle("Menú");
         setSize(800, 600);
@@ -54,6 +57,16 @@ public class VentanaMenu extends Frame {
             }
         });
 
+        btnBuscarProveedorPorId = new Button("Buscar Proveedor por ID");
+        btnBuscarProveedorPorId.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaBuscarProveedor ventanaBuscarProveedor = new VentanaBuscarProveedor(Datos.getProvedores());
+                dispose();
+            }
+        });
+
+
         btnRegresar = new Button("Regresar");
         btnRegresar.addActionListener(new ActionListener() {
             @Override
@@ -66,6 +79,7 @@ public class VentanaMenu extends Frame {
         panel.add(btnListarProductos);
         panel.add(btnListarProvedores);
         panel.add(btnListarSolicitudesCompras);
+        panel.add(btnBuscarProveedorPorId);
         panel.add(btnRegresar);
 
         add(panel, BorderLayout.CENTER);
