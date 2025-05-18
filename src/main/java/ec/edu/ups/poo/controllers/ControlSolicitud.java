@@ -1,9 +1,8 @@
 package ec.edu.ups.poo.controllers;
 
 import ec.edu.ups.poo.models.*;
-import ec.edu.ups.poo.models.Enums.EstadoSolicitud;
-import ec.edu.ups.poo.models.Enums.Rol;
-import ec.edu.ups.poo.models.Enums.Feriado;
+import ec.edu.ups.poo.models.enums.EstadoSolicitud;
+import ec.edu.ups.poo.models.enums.Feriado;
 
 import java.time.Month;
 import java.util.*;
@@ -15,9 +14,6 @@ public class ControlSolicitud {
 
     public ControlSolicitud() {
         solicitudes = new ArrayList<>();
-
-
-
     }
 
     public SolicitudCompra getSolicitud(int n) {

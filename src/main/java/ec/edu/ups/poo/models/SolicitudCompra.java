@@ -1,6 +1,6 @@
 package ec.edu.ups.poo.models;
 
-import ec.edu.ups.poo.models.Enums.EstadoSolicitud;
+import ec.edu.ups.poo.models.enums.EstadoSolicitud;
 import ec.edu.ups.poo.models.Interface.Calculable;
 
 import java.text.SimpleDateFormat;

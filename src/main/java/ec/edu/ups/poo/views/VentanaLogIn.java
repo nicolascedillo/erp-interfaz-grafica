@@ -1,71 +1,88 @@
 package ec.edu.ups.poo.views;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class VentanaLogIn extends Frame {
 
     private TextField txtUsuarioCorre;
     private TextField txtContrasena;
-
     private Button btnLogIn;
     private Button btnSalir;
-
+    private Button btnVerContrasena;
+    private boolean contrasenaVisible;
     Datos datos = new Datos();
 
     public VentanaLogIn() {
-
+        contrasenaVisible = false;
         setTitle("Log In");
-        setSize(500, 500);
+        setSize(500, 250);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
 
-        Panel panel = new Panel();
-        Label titulo = new Label("Sistema de Gestio ERP");
+        Label titulo = new Label("Sistema de Gestio ERP", Label.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         add(titulo, BorderLayout.NORTH);
-        txtUsuarioCorre = new TextField(20);
-        txtContrasena = new TextField(20);
-        panel.setLayout(new GridLayout(3, 2));
 
-        Panel panelUsuario = new Panel(new FlowLayout(FlowLayout.RIGHT,0,50));
-        panelUsuario.add(new Label("Usuario / Correo: "));
-        panel.add(panelUsuario);
+        Panel panelCentral = new Panel(new FlowLayout(FlowLayout.CENTER, 1, 20));
 
-        Panel panelUsuarioIngresar = new Panel(new FlowLayout(FlowLayout.LEFT,0,50));
-        panelUsuarioIngresar.add(txtUsuarioCorre);
-        panel.add(panelUsuarioIngresar);
+        Panel panelUsuario = new Panel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        Label lblUsuario = new Label("Correo:");
+        lblUsuario.setFont(new Font("Arial", Font.PLAIN, 16));
+        txtUsuarioCorre = new TextField(22);
+        txtUsuarioCorre.setFont(new Font("Arial", Font.PLAIN, 16));
+        panelUsuario.add(lblUsuario);
+        panelUsuario.add(txtUsuarioCorre);
 
-        Panel panelContrasena = new Panel(new FlowLayout(FlowLayout.RIGHT,0,50));
-        panelContrasena.add(new Label("Contraseña: "));
-        panel.add(panelContrasena);
+        Panel panelContrasena = new Panel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        Label lblContrasena = new Label("Contraseña:");
+        lblContrasena.setFont(new Font("Arial", Font.PLAIN, 16));
+        txtContrasena = new TextField(18);
+        txtContrasena.setFont(new Font("Arial", Font.PLAIN, 16));
+        txtContrasena.setEchoChar('●');
+        btnVerContrasena = new Button("Mostrar");
+        btnVerContrasena.setFont(new Font("-", Font.PLAIN, 12));
+        btnVerContrasena.setPreferredSize(new Dimension(50, 25));
+        panelContrasena.add(lblContrasena);
+        panelContrasena.add(txtContrasena);
+        panelContrasena.add(btnVerContrasena);
 
-        Panel panelContrasenaIngresar = new Panel(new FlowLayout(FlowLayout.LEFT,0,50));
-        panelContrasenaIngresar.add(txtContrasena);
-        panel.add(panelContrasenaIngresar);
-
-        Panel panelLogIn = new Panel(new FlowLayout(FlowLayout.CENTER));
+        Panel panelBotones = new Panel(new FlowLayout(FlowLayout.CENTER, 40, 0));
         btnLogIn = new Button("Log In");
-        panelLogIn.add(btnLogIn);
-        panel.add(panelLogIn);
-
-        Panel panelSalir = new Panel(new FlowLayout(FlowLayout.CENTER));
+        btnLogIn.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnLogIn.setPreferredSize(new Dimension(110, 35));
         btnSalir = new Button("Salir");
-        panelSalir.add(btnSalir);
-        panel.add(panelSalir);
+        btnSalir.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnSalir.setPreferredSize(new Dimension(110, 35));
+        panelBotones.add(btnLogIn);
+        panelBotones.add(btnSalir);
 
-        add(panel, BorderLayout.CENTER);
+        panelCentral.add(panelUsuario);
+        panelCentral.add(panelContrasena);
+        panelCentral.add(panelBotones);
+
+        add(panelCentral, BorderLayout.CENTER);
+
+        btnVerContrasena.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                contrasenaVisible = !contrasenaVisible;
+                if (contrasenaVisible) {
+                    txtContrasena.setEchoChar((char)0);
+                    btnVerContrasena.setLabel("Ocultar");
+                } else {
+                    txtContrasena.setEchoChar('●');
+                    btnVerContrasena.setLabel("Mostrar");
+                }
+            }
+        });
 
         btnLogIn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if (validarUsuario()){
                     VentanaMenu ventanaMenu = new VentanaMenu();
                     dispose();
                 }
-
             }
         });
 
@@ -75,21 +92,35 @@ public class VentanaLogIn extends Frame {
                 System.exit(0);
             }
         });
+
         setVisible(true);
     }
 
     public boolean validarUsuario(){
-         if (txtUsuarioCorre.getText().equals(datos.getNicolas().getUsername()) && txtContrasena.getText().equals(datos.getNicolas().getPassword())) {
+        if (txtUsuarioCorre.getText().equals(datos.getNicolas().getUsername()) && txtContrasena.getText().equals(datos.getNicolas().getPassword())) {
             return true;
         } else if (txtUsuarioCorre.getText().equals(datos.getMateo().getUsername()) && txtContrasena.getText().equals(datos.getMateo().getPassword())) {
-             return true;
-         }
-        txtUsuarioCorre.setBackground(Color.RED);
-        txtContrasena.setBackground(Color.RED);
+            return true;
+        }
+        mostrarMensajeTemp("Usuario o contraseña Incorrecto");
         return false;
-
-
-
     }
 
+    private void mostrarMensajeTemp(String mensaje){
+        Dialog dialogo = new Dialog(this, "Error", true);
+        Label label = new Label(mensaje, Label.CENTER);
+        label.setFont(new Font("Arial", Font.PLAIN, 16));
+        dialogo.add(label);
+        dialogo.setSize(300, 100);
+        dialogo.setLocationRelativeTo(this);
+
+        dialogo.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dialogo.setVisible(false);
+                dialogo.dispose();
+            }
+        });
+        dialogo.setVisible(true);
+    }
 }

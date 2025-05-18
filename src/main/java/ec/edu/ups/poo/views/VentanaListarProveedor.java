@@ -87,5 +87,8 @@ public class VentanaListarProveedor {
         scrollPane.add(panelPrincipal);
         frame.add(scrollPane, BorderLayout.CENTER);
         frame.setVisible(true);
+        frame.revalidate();
+        frame.repaint();
+
     }
 }

@@ -1,6 +1,5 @@
 package ec.edu.ups.poo.views;
 
-import ec.edu.ups.poo.models.Producto;
 import ec.edu.ups.poo.models.Provedor;
 
 import java.awt.*;
@@ -8,12 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class VentanaBuscarProveedor {
+public class VentanaBuscarProveedorID {
     private Frame frame;
     private Panel panelPrincipal;
     private List<Provedor> proveedores;
 
-    public VentanaBuscarProveedor(List<Provedor> proveedores) {
+    public VentanaBuscarProveedorID(List<Provedor> proveedores) {
         this.proveedores = proveedores;
         frame = new Frame("Buscar Proveedor");
         frame.setSize(725, 600);
@@ -21,7 +20,7 @@ public class VentanaBuscarProveedor {
         frame.setLocationRelativeTo(null);
 
         panelPrincipal = new Panel(new FlowLayout());
-        Label titulo = new Label("Listar Proveedores");
+        Label titulo = new Label("Buscar Proveedor por ID");
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         Panel panelSuperior = new Panel(new FlowLayout());
         panelSuperior.add(titulo);
@@ -55,7 +54,7 @@ public class VentanaBuscarProveedor {
                 if (encontrado != null) {
                     Panel panelEncontrado = new Panel(new GridLayout(0, 2));
                     panelEncontrado.setPreferredSize(new Dimension(700,180));
-                    panelEncontrado.add(new Label("RUC:"));
+                    panelEncontrado.add(new Label("ID:"));
                     TextField txtRUC = new TextField(encontrado.getCedula());
                     txtRUC.setEditable(false);
                     panelEncontrado.add(txtRUC);
@@ -94,6 +93,7 @@ public class VentanaBuscarProveedor {
                     panelPrincipal.add(panelNoEncontrado);
                     panelPrincipal.revalidate();
                     panelPrincipal.repaint();
+
                 }
             }
         });
@@ -106,7 +106,6 @@ public class VentanaBuscarProveedor {
     }
 
     public Provedor BuscarProveedor(String cedula) {
-
         for (Provedor provedor : proveedores) {
             if(provedor.getCedula().equals(cedula)){
                 return provedor;
@@ -115,8 +114,4 @@ public class VentanaBuscarProveedor {
         return null;
     }
 
-    public VentanaBuscarProveedor(List<Producto> productos, String nombre) {
-
-        //if(producto.getNombre().toLowerCase().contains(nombre.toLowerCase())){}
-    }
 }

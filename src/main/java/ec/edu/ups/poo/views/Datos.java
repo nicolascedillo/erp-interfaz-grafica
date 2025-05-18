@@ -1,7 +1,7 @@
 package ec.edu.ups.poo.views;
 
 import ec.edu.ups.poo.models.*;
-import ec.edu.ups.poo.models.Enums.*;
+import ec.edu.ups.poo.models.enums.*;
 
 
 import java.util.ArrayList;
@@ -101,6 +101,9 @@ public class Datos {
         solicitudes.add(solicitud5);
     }
 
+    public static void addProvedor(Provedor provedor) {
+        Datos.provedores.add(provedor);
+    }
     public static List<Provedor> getProvedores() {
         return provedores;
     }

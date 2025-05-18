@@ -5,7 +5,7 @@ import ec.edu.ups.poo.controllers.ControlProvedor;
 import ec.edu.ups.poo.controllers.ControlSolicitud;
 import ec.edu.ups.poo.models.Departamento;
 import ec.edu.ups.poo.models.Empleado;
-import ec.edu.ups.poo.models.Enums.Rol;
+import ec.edu.ups.poo.models.enums.Rol;
 import java.util.Scanner;
 
 public class ViewConsole {

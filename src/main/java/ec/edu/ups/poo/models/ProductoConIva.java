@@ -1,6 +1,6 @@
 package ec.edu.ups.poo.models;
 
-import ec.edu.ups.poo.models.Enums.Feriado;
+import ec.edu.ups.poo.models.enums.Feriado;
 
 public class ProductoConIva extends Producto {
     private Feriado festividad;
