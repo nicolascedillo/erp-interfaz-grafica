@@ -1,6 +1,6 @@
 package ec.edu.ups.poo.views;
 
-import ec.edu.ups.poo.views.Datos;
+import ec.edu.ups.poo.models.Datos;
 import ec.edu.ups.poo.models.Provedor;
 import java.awt.*;
 import java.awt.event.*;
@@ -12,7 +12,7 @@ public class VentanaAgregarProveedor extends Frame {
 
     public VentanaAgregarProveedor() {
         setTitle("Agregar Proveedor");
-        setSize(800, 450); // Aumenté ligeramente la altura para mejor visualización
+        setSize(800, 450);
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
@@ -34,7 +34,7 @@ public class VentanaAgregarProveedor extends Frame {
         add(panelSuperior, BorderLayout.NORTH);
 
         Panel panelFormulario = new Panel();
-        panelFormulario.setLayout(new GridLayout(6, 2, 5, 8)); // 6 filas para los campos
+        panelFormulario.setLayout(new GridLayout(6, 2, 5, 8));
         panelFormulario.setPreferredSize(new Dimension(700, 250));
 
         panelFormulario.add(new Label("RUC:"));

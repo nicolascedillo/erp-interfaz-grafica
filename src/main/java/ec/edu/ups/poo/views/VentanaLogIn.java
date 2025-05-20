@@ -1,4 +1,6 @@
 package ec.edu.ups.poo.views;
+import ec.edu.ups.poo.models.Datos;
+
 import java.awt.*;
 import java.awt.event.*;
 

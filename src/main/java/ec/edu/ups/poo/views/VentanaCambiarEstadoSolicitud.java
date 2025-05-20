@@ -163,7 +163,6 @@ public class VentanaCambiarEstadoSolicitud {
                     txtTotal.setEditable(false);
                     panelEncontrado.add(txtTotal);
 
-                    // Panel para cambiar estado
                     Panel panelCambio = new Panel(new GridLayout(0, 2));
                     panelCambio.setPreferredSize(new Dimension(500, 50));
                     panelCambio.add(new Label("Cambiar estado a: "));
@@ -175,7 +174,7 @@ public class VentanaCambiarEstadoSolicitud {
                     panelCambio.add(choiceEstado);
 
                     Button btnCambiarEstado = new Button("Cambiar Estado");
-                    panelCambio.add(new Label()); // Espacio vacío
+                    panelCambio.add(new Label());
                     panelCambio.add(btnCambiarEstado);
 
                     Label lblMensaje = new Label("");

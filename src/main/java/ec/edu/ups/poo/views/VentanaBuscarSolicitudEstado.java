@@ -38,30 +38,33 @@ public class VentanaBuscarSolicitudEstado {
         });
         frame.add(panelSuperior, BorderLayout.NORTH);
 
-        Panel panel = new Panel(new GridLayout(0, 2));
-        panel.setPreferredSize(new Dimension(725,50));
-        panel.add(new Label("Ingrese el Estado de la solicitud a buscar:"));
-        TextField txtEstado = new TextField(10);
-        panel.add(txtEstado);
+        Panel panelCentral = new Panel(new GridLayout(2, 2,10,10));
+        panelCentral.setPreferredSize(new Dimension(600,50));
+        panelCentral.add(new Label("Ingrese el Estado de la solicitud a buscar:"));
+
+        Choice listaEstado = new Choice();
+        listaEstado.addItem("SOLICITADA");
+        listaEstado.addItem("APROVADA");
+        listaEstado.addItem("EN_REVISION");
+        listaEstado.addItem("RECHAZADA");
+        panelCentral.add(listaEstado);
 
         Button botonBuscar = new Button("Buscar");
         Panel panelBuscar = new Panel(new FlowLayout(FlowLayout.RIGHT));
         panelBuscar.add(botonBuscar);
-        panel.add(panelBuscar);
+        panelCentral.add(panelBuscar);
         botonBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EstadoSolicitud estado = EstadoSolicitud.valueOf(txtEstado.getText().toUpperCase());
+                EstadoSolicitud estado = EstadoSolicitud.valueOf(listaEstado.getSelectedItem());
                 List<SolicitudCompra> encontrados = buscarPorEstado(estado);
-                panelPrincipal.removeAll();
 
                 if (!encontrados.isEmpty()) {
-                    Panel panelResultados = new Panel();
-                    panelResultados.setLayout(new GridLayout(encontrados.size(), 1, 5, 5));
+                    Panel panelResultados = new Panel(new GridLayout(encontrados.size(), 1));
 
                     for (SolicitudCompra encontrado : encontrados) {
                         Panel panelEncontrado = new Panel(new GridLayout(0, 2));
-                        panelEncontrado.setPreferredSize(new Dimension(725, 400));
+                        panelEncontrado.setPreferredSize(new Dimension(400, 400));
 
                         panelEncontrado.add(new Label("ID:"));
                         TextField txtID = new TextField(String.valueOf(encontrado.getId()));
@@ -149,15 +152,21 @@ public class VentanaBuscarSolicitudEstado {
                         panelResultados.add(panelEncontrado);
                     }
 
+
                     ScrollPane scroll = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
-                    scroll.setPreferredSize(new Dimension(720, 500));
+                    scroll.setPreferredSize(new Dimension(700, 500));
                     scroll.add(panelResultados);
+                    panelPrincipal.removeAll();
+
                     panelPrincipal.add(scroll);
+
 
                 } else {
 
                     Label mensaje = new Label("No se encontró la solicitud con Estado: " + estado);
+                    panelPrincipal.removeAll();
                     panelPrincipal.add(mensaje);
+
 
                 }
 
@@ -166,7 +175,7 @@ public class VentanaBuscarSolicitudEstado {
             }
         });
 
-        panelPrincipal.add(panel);
+        panelPrincipal.add(panelCentral);
         frame.add(panelPrincipal, BorderLayout.CENTER);
         frame.setVisible(true);
 
@@ -181,5 +190,4 @@ public class VentanaBuscarSolicitudEstado {
         }
         return resultados;
     }
-
 }

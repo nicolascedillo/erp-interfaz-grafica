@@ -1,6 +1,5 @@
-package ec.edu.ups.poo.views;
+package ec.edu.ups.poo.models;
 
-import ec.edu.ups.poo.models.*;
 import ec.edu.ups.poo.models.enums.*;
 
 

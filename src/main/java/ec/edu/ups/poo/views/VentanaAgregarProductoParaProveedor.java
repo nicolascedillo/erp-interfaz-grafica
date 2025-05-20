@@ -4,7 +4,6 @@ import ec.edu.ups.poo.models.*;
 import ec.edu.ups.poo.models.enums.Feriado;
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class VentanaAgregarProductoParaProveedor extends Frame {
 
@@ -24,7 +23,6 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
         Button botonSalir = new Button("Salir");
         botonSalir.addActionListener(e -> {
             dispose();
-            new VentanaAgregarProveedor();
         });
         panelBotonSalir.add(botonSalir);
         panelSuperior.add(panelBotonSalir, BorderLayout.EAST);

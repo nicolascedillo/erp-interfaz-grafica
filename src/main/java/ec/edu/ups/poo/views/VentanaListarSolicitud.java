@@ -35,8 +35,8 @@ public class VentanaListarSolicitud {
         frame.add(panelSuperior, BorderLayout.NORTH);
 
         ScrollPane scrollPane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
-        scrollPane.setSize(580, 350);
-        panelPrincipal.setPreferredSize(new Dimension(560, solicitudes.size() * 400));
+        scrollPane.setSize(500, 350);
+        panelPrincipal.setPreferredSize(new Dimension(500, solicitudes.size() * 400));
         for (SolicitudCompra solicitud : solicitudes) {
             Panel panel = new Panel(new GridLayout(0, 2));
             panel.setPreferredSize(new Dimension(700, 400));

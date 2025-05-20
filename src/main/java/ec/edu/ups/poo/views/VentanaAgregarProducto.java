@@ -4,7 +4,8 @@ import ec.edu.ups.poo.models.*;
 import ec.edu.ups.poo.models.enums.Feriado;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class VentanaAgregarProducto extends Frame {
 
@@ -14,20 +15,20 @@ public class VentanaAgregarProducto extends Frame {
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
-        Panel panelSuperior = new Panel(new BorderLayout());
-
+        Panel panelSuperior = new Panel(new FlowLayout());
         Label titulo = new Label("Agregar Producto", Label.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 22));
-        panelSuperior.add(titulo, BorderLayout.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelSuperior.add(titulo);
 
-        Panel panelBotonSalir = new Panel(new FlowLayout(FlowLayout.RIGHT));
         Button botonSalir = new Button("Salir");
-        botonSalir.addActionListener(e -> {
-            dispose();
-            new VentanaMenu();
+        botonSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                VentanaMenu ventanaMenu = new VentanaMenu();
+            }
         });
-        panelBotonSalir.add(botonSalir);
-        panelSuperior.add(panelBotonSalir, BorderLayout.EAST);
+        panelSuperior.add(botonSalir);
 
         add(panelSuperior, BorderLayout.NORTH);
 

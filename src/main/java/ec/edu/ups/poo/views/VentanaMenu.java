@@ -1,5 +1,7 @@
 package ec.edu.ups.poo.views;
 
+import ec.edu.ups.poo.models.Datos;
+
 import java.awt.*;
 
 public class VentanaMenu extends Frame {
@@ -29,15 +31,11 @@ public class VentanaMenu extends Frame {
             dispose();
         });
 
-
-
-
         Button btnRegistrarSolicitud = new Button("Solicitud");
         btnRegistrarSolicitud.addActionListener(e -> {
-
+            new VentanaAgregarSolicitud();
+            dispose();
         });
-
-
 
         panelRegistrar.add(btnAgregarProveedor);
         panelRegistrar.add(btnAgregarProducto);

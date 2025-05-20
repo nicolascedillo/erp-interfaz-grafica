@@ -36,7 +36,7 @@ public class VentanaListarProveedor {
 
         ScrollPane scrollPane = new ScrollPane (ScrollPane.SCROLLBARS_AS_NEEDED);
         scrollPane.setSize(580, 350);
-        panelPrincipal.setPreferredSize(new Dimension(560, proveedores.size() * 160));
+        panelPrincipal.setPreferredSize(new Dimension(560, proveedores.size() * 200));
 
         for (Provedor provedor: proveedores) {
             Panel panel = new Panel(new GridLayout(0, 2));
