@@ -6,17 +6,17 @@ import ec.edu.ups.poo.models.enums.Feriado;
 import java.awt.*;
 import java.awt.event.*;
 
-public class VentanaAgregarProducto extends Frame {
+public class VentanaAgregarProductoParaProveedor extends Frame {
 
-    public VentanaAgregarProducto() {
-        setTitle("Agregar Producto");
+    public VentanaAgregarProductoParaProveedor(String ruc) {
+        setTitle("Agregar Producto para Proveedor");
         setSize(800, 400);
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
         Panel panelSuperior = new Panel(new BorderLayout());
 
-        Label titulo = new Label("Agregar Producto", Label.CENTER);
+        Label titulo = new Label("Agregar Producto al Proveedor", Label.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 22));
         panelSuperior.add(titulo, BorderLayout.CENTER);
 
@@ -24,7 +24,7 @@ public class VentanaAgregarProducto extends Frame {
         Button botonSalir = new Button("Salir");
         botonSalir.addActionListener(e -> {
             dispose();
-            new VentanaMenu();
+            new VentanaAgregarProveedor();
         });
         panelBotonSalir.add(botonSalir);
         panelSuperior.add(panelBotonSalir, BorderLayout.EAST);
@@ -62,9 +62,11 @@ public class VentanaAgregarProducto extends Frame {
         TextField txtMarca = new TextField();
         panelForm.add(txtMarca);
 
-        panelForm.add(new Label("Proveedor (Cédula):"));
-        TextField txtCedulaProveedor = new TextField();
-        panelForm.add(txtCedulaProveedor);
+        panelForm.add(new Label("Proveedor (RUC):"));
+        TextField txtRucProveedor = new TextField(ruc);
+        txtRucProveedor.setEditable(false);
+        txtRucProveedor.setBackground(Color.LIGHT_GRAY);
+        panelForm.add(txtRucProveedor);
 
         panelForm.add(new Label(""));
 
@@ -83,54 +85,33 @@ public class VentanaAgregarProducto extends Frame {
             String nombre = txtNombre.getText().trim();
             String precioStr = txtPrecioUnitario.getText().trim();
             String marca = txtMarca.getText().trim();
-            String cedula = txtCedulaProveedor.getText().trim();
+            String cedula = txtRucProveedor.getText().trim();
 
-            if (categoria.isEmpty() || idStr.isEmpty() || nombre.isEmpty() || precioStr.isEmpty() || marca.isEmpty() || cedula.isEmpty()) {
+            if (categoria.isEmpty() || idStr.isEmpty() || nombre.isEmpty() || precioStr.isEmpty() || marca.isEmpty()) {
                 mostrarMensajeTemp("Todos los campos son obligatorios");
                 return;
             }
 
-            boolean esIdNumero = true;
-            boolean esPrecioNumero = true;
-            for (int i = 0; i < idStr.length(); i++) {
-                if (!Character.isDigit(idStr.charAt(i))) {
-                    esIdNumero = false;
-                    break;
-                }
-            }
-            String precioStrAux = precioStr.replace(",", ".");
-            int puntoCount = 0;
-            for (int i = 0; i < precioStrAux.length(); i++) {
-                char c = precioStrAux.charAt(i);
-                if (!Character.isDigit(c)) {
-                    if (c == '.' && puntoCount == 0) {
-                        puntoCount++;
-                    } else {
-                        esPrecioNumero = false;
-                        break;
-                    }
-                }
-            }
-
-            if (!esIdNumero || !esPrecioNumero) {
+            if (!idStr.matches("\\d+") || !precioStr.matches("[\\d.,]+")) {
                 mostrarMensajeTemp("ID y Precio deben ser numéricos");
                 return;
             }
 
-            Provedor temp = null;
+            Provedor proveedor = null;
             for (Provedor p : Datos.getProvedores()) {
                 if (p.getCedula().equals(cedula)) {
-                    temp = p;
+                    proveedor = p;
                     break;
                 }
             }
-            if (temp == null) {
-                mostrarMensajeTemp("Ingrese la cédula de un proveedor para registrar el producto");
+
+            if (proveedor == null) {
+                mostrarMensajeTemp("Proveedor no encontrado");
                 return;
             }
 
             int id = Integer.parseInt(idStr);
-            double precioUnitario = Double.parseDouble(precioStrAux);
+            double precioUnitario = Double.parseDouble(precioStr.replace(",", "."));
 
             Producto producto;
             switch (categoria) {
@@ -139,23 +120,22 @@ public class VentanaAgregarProducto extends Frame {
                 case "Agricola":
                 case "Medicina":
                 case "Escolar":
-                    producto = new ProductoSinIva(id, nombre, precioUnitario, marca, "El producto no agraba iva");
+                    producto = new ProductoSinIva(id, nombre, precioUnitario, marca, "El producto no agrava IVA");
                     break;
                 default:
                     producto = new ProductoConIva(id, nombre, precioUnitario, marca, Feriado.NO_FERIADO);
                     break;
             }
+
             Datos.getProductos().add(producto);
-            temp.addProducto(producto);
+            proveedor.addProducto(producto);
 
-            mostrarMensajeTemp("Producto registrado y vinculado a proveedor");
-
+            mostrarMensajeTemp("Producto agregado correctamente al proveedor");
             txtCategoria.setText("");
             txtId.setText("");
             txtNombre.setText("");
             txtPrecioUnitario.setText("");
             txtMarca.setText("");
-            txtCedulaProveedor.setText("");
         });
 
         setVisible(true);

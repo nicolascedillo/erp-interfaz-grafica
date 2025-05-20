@@ -20,7 +20,7 @@ public class VentanaMenu extends Frame {
         panelRegistrar.add(new Label("Registrar:", Label.CENTER));
         Button btnAgregarProveedor = new Button("Proveedor");
         btnAgregarProveedor.addActionListener(e -> {
-            new VentanaAgregarProveedor(Datos.getProvedores());
+            new VentanaAgregarProveedor();
             dispose();
         });
         Button btnAgregarProducto = new Button("Producto");
