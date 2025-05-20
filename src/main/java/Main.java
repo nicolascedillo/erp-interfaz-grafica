@@ -9,6 +9,4 @@ public class Main {
     }
 }
 
-    // mateomiller1605@gmail.com
-    // MJMMiller
-    // 0101122334
+    //  mateomiller1605@gmail.com
