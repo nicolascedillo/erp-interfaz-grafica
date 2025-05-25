@@ -11,11 +11,12 @@ import java.util.List;
 
 public class VentanaBuscarProductoNombre {
     private List<Producto> productos;
+    private Frame frame;
 
     public VentanaBuscarProductoNombre(List<Producto> productos) {
         this.productos = productos;
-        Frame frame = new Frame("Buscar Producto");
-        frame.setSize(725, 400);
+        frame = new Frame("Buscar Producto");
+        frame.setSize(725, 300);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
@@ -112,12 +113,7 @@ public class VentanaBuscarProductoNombre {
                     frame.revalidate();
 
                 } else{
-
-                    Label txtNoEncontrado = new  Label("No existe producto con el nombre: " + nombre);
-                    panelPrincipal.removeAll();
-                    panelPrincipal.add(txtNoEncontrado);
-                    frame.revalidate();
-
+                    mostrarMensajeTempRojo("No existe producto con nombre: " + nombre);
                 }
             }
         });
@@ -125,6 +121,41 @@ public class VentanaBuscarProductoNombre {
         panelPrincipal.add(panel);
         frame.add(panelPrincipal, BorderLayout.CENTER);
         frame.setVisible(true);
+    }
+
+    private void mostrarMensajeTempRojo(String mensaje) {
+        Dialog dialogo = new Dialog(frame, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(frame);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(220, 53, 69));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(Color.WHITE);
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
     }
 
     public Producto buscarProductoNombre(String nombre) {

@@ -13,11 +13,11 @@ public class VentanaListarProveedor {
     public VentanaListarProveedor(List<Provedor> proveedores) {
 
         Frame frame = new Frame("Lista de Proveedores");
-        frame.setSize(800, 600);
+        frame.setSize(750, 600);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
-        Panel panelPrincipal = new Panel(new FlowLayout(FlowLayout.LEFT));
+        Panel panelPrincipal = new Panel(new FlowLayout(FlowLayout.CENTER));
         Label titulo = new Label("Listar Proveedores");
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
 
@@ -36,11 +36,11 @@ public class VentanaListarProveedor {
 
         ScrollPane scrollPane = new ScrollPane (ScrollPane.SCROLLBARS_AS_NEEDED);
         scrollPane.setSize(580, 350);
-        panelPrincipal.setPreferredSize(new Dimension(560, proveedores.size() * 200));
+        panelPrincipal.setPreferredSize(new Dimension(580, proveedores.size() * 200));
 
         for (Provedor provedor: proveedores) {
             Panel panel = new Panel(new GridLayout(0, 2));
-            panel.setPreferredSize(new Dimension(700,180));
+            panel.setPreferredSize(new Dimension(650,180));
 
             panel.add(new Label("RUC:"));
             TextField txtRUC = new TextField(provedor.getId());

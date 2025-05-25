@@ -15,11 +15,11 @@ public class VentanaListarSolicitud {
     public VentanaListarSolicitud(List<SolicitudCompra> solicitudes) {
 
         Frame frame = new Frame("Lista de Solicitudes");
-        frame.setSize(800, 650);
+        frame.setSize(750, 650);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
-        Panel panelPrincipal = new Panel(new FlowLayout(FlowLayout.LEFT));
+        Panel panelPrincipal = new Panel(new FlowLayout(FlowLayout.CENTER));
         Label titulo = new Label("Listar Solicitudes");
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         Panel panelSuperior = new Panel(new FlowLayout());
@@ -37,10 +37,10 @@ public class VentanaListarSolicitud {
 
         ScrollPane scrollPane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
         scrollPane.setSize(500, 350);
-        panelPrincipal.setPreferredSize(new Dimension(500, solicitudes.size() * 400));
+        panelPrincipal.setPreferredSize(new Dimension(500, solicitudes.size() * 435));
         for (SolicitudCompra solicitud : solicitudes) {
             Panel panel = new Panel(new GridLayout(0, 2));
-            panel.setPreferredSize(new Dimension(700, 400));
+            panel.setPreferredSize(new Dimension(650, 400));
 
             panel.add(new Label("Id:"));
             TextField txtId = new TextField(String.valueOf(solicitud.getId()));
