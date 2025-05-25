@@ -33,14 +33,14 @@ public class Datos {
         ProductoSinIva producto8 = new ProductoSinIva("PD-008", "Medicamento", 10.0, "SaludTotal", "Medicamento libre de IVA");
 
 
-        Provedor provedor = new Provedor("0105236525","Juan","Perez","095 542 6252","Av de las Americas","juanperez@gmail.com");
-        Provedor provedor2 = new Provedor("0108987654", "María", "Gomez", "096 123 4567", "Calle Larga", "mariagomez@hotmail.com");
-        Provedor provedor3 = new Provedor("0101122334", "Carlos", "Vera", "098 765 4321", "Av Solano", "carlosvera@yahoo.com");
-        Provedor provedor4 = new Provedor("0105566778", "Lucía", "Mendoza", "097 334 2211", "Av Ordóñez Lasso", "luciamendoza@gmail.com");
-        Provedor provedor5 = new Provedor("0103344556", "Andrés", "Salazar", "096 778 8899", "Calle Bolívar", "andressalazar@outlook.com");
-        Provedor provedor6 = new Provedor("0106677889", "Patricia", "Rivas", "095 112 3344", "Av Loja", "patriciarivas@hotmail.com");
-        Provedor provedor7 = new Provedor("0102233445", "Diego", "Martínez", "098 556 7788", "Camino del Tejar", "diegomartinez@yahoo.com");
-        Provedor provedor8 = new Provedor("0104455667", "Ana", "Cárdenas", "097 665 4433", "Av Remigio Crespo", "anacardenas@gmail.com");
+        Provedor provedor = new Provedor("0105236525001","Juan","Perez","095 542 6252","Av de las Americas","juanperez@gmail.com");
+        Provedor provedor2 = new Provedor("0108987654001", "María", "Gomez", "096 123 4567", "Calle Larga", "mariagomez@hotmail.com");
+        Provedor provedor3 = new Provedor("0101122334001", "Carlos", "Vera", "098 765 4321", "Av Solano", "carlosvera@yahoo.com");
+        Provedor provedor4 = new Provedor("0105566778001", "Lucía", "Mendoza", "097 334 2211", "Av Ordóñez Lasso", "luciamendoza@gmail.com");
+        Provedor provedor5 = new Provedor("0103344556001", "Andrés", "Salazar", "096 778 8899", "Calle Bolívar", "andressalazar@outlook.com");
+        Provedor provedor6 = new Provedor("0106677889001", "Patricia", "Rivas", "095 112 3344", "Av Loja", "patriciarivas@hotmail.com");
+        Provedor provedor7 = new Provedor("0102233445001", "Diego", "Martínez", "098 556 7788", "Camino del Tejar", "diegomartinez@yahoo.com");
+        Provedor provedor8 = new Provedor("0104455667001", "Ana", "Cárdenas", "097 665 4433", "Av Remigio Crespo", "anacardenas@gmail.com");
 
         provedores.add(provedor);
         provedores.add(provedor2);

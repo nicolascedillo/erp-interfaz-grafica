@@ -112,6 +112,10 @@ public class VentanaListarSolicitud {
                 txtSubTotalDetalle.setEditable(false);
                 panel.add(txtSubTotalDetalle);
                 cont += 1;
+
+                panel.add(new Label(""));
+                panel.add(new Label(""));
+
             }
 
             panel.add(new Label("IVA:"));
