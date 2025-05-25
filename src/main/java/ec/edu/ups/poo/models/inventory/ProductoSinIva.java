@@ -1,6 +1,6 @@
-package ec.edu.ups.poo.models;
+package ec.edu.ups.poo.models.inventory;
 
-public class ProductoSinIva extends  Producto {
+public class ProductoSinIva extends Producto {
     private String motivo;
 
     public ProductoSinIva(String id, String nombre, Double precioUnitario, String marca, String motivo) {

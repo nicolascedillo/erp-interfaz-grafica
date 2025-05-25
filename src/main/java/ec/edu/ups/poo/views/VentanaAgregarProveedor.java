@@ -1,8 +1,8 @@
 package ec.edu.ups.poo.views;
 
-import ec.edu.ups.poo.models.Datos;
-import ec.edu.ups.poo.models.Producto;
-import ec.edu.ups.poo.models.Provedor;
+import ec.edu.ups.poo.data.Datos;
+import ec.edu.ups.poo.models.inventory.Producto;
+import ec.edu.ups.poo.models.entities.Provedor;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;

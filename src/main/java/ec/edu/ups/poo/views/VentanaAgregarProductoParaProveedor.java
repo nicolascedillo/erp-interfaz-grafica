@@ -1,7 +1,11 @@
 package ec.edu.ups.poo.views;
 
-import ec.edu.ups.poo.models.*;
+import ec.edu.ups.poo.models.entities.Provedor;
 import ec.edu.ups.poo.models.enums.Feriado;
+import ec.edu.ups.poo.data.Datos;
+import ec.edu.ups.poo.models.inventory.Producto;
+import ec.edu.ups.poo.models.inventory.ProductoConIva;
+import ec.edu.ups.poo.models.inventory.ProductoSinIva;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

@@ -1,10 +1,8 @@
 package ec.edu.ups.poo.views;
 
-import ec.edu.ups.poo.models.Provedor;
+import ec.edu.ups.poo.models.entities.Provedor;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class VentanaBuscarProveedorID {

@@ -1,5 +1,12 @@
-package ec.edu.ups.poo.models;
+package ec.edu.ups.poo.data;
 
+import ec.edu.ups.poo.models.inventory.Producto;
+import ec.edu.ups.poo.models.inventory.ProductoConIva;
+import ec.edu.ups.poo.models.inventory.ProductoSinIva;
+import ec.edu.ups.poo.models.purchases.SolicitudCompra;
+import ec.edu.ups.poo.models.entities.Departamento;
+import ec.edu.ups.poo.models.entities.Empleado;
+import ec.edu.ups.poo.models.entities.Provedor;
 import ec.edu.ups.poo.models.enums.*;
 
 

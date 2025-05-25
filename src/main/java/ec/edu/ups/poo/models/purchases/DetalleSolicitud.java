@@ -1,6 +1,7 @@
-package ec.edu.ups.poo.models;
+package ec.edu.ups.poo.models.purchases;
 
-import ec.edu.ups.poo.models.Interface.Calculable;
+import ec.edu.ups.poo.models.interfaces.Calculable;
+import ec.edu.ups.poo.models.inventory.Producto;
 
 import java.util.Objects;
 

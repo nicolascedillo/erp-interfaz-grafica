@@ -1,7 +1,9 @@
-package ec.edu.ups.poo.models;
+package ec.edu.ups.poo.models.purchases;
 
+import ec.edu.ups.poo.models.inventory.Producto;
+import ec.edu.ups.poo.models.entities.Empleado;
 import ec.edu.ups.poo.models.enums.EstadoSolicitud;
-import ec.edu.ups.poo.models.Interface.Calculable;
+import ec.edu.ups.poo.models.interfaces.Calculable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

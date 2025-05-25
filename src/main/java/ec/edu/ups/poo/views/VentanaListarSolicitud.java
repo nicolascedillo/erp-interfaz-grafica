@@ -1,9 +1,8 @@
 package ec.edu.ups.poo.views;
 
-import ec.edu.ups.poo.models.DetalleSolicitud;
-import ec.edu.ups.poo.models.ProductoConIva;
-import ec.edu.ups.poo.models.Provedor;
-import ec.edu.ups.poo.models.SolicitudCompra;
+import ec.edu.ups.poo.models.purchases.DetalleSolicitud;
+import ec.edu.ups.poo.models.inventory.ProductoConIva;
+import ec.edu.ups.poo.models.purchases.SolicitudCompra;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

@@ -1,6 +1,6 @@
 package ec.edu.ups.poo.views;
 
-import ec.edu.ups.poo.models.*;
+import ec.edu.ups.poo.models.entities.Empleado;
 import ec.edu.ups.poo.models.enums.EstadoSolicitud;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Calendar;
 import java.time.Month;
 import ec.edu.ups.poo.models.enums.Feriado;
+import ec.edu.ups.poo.data.Datos;
+import ec.edu.ups.poo.models.inventory.Producto;
+import ec.edu.ups.poo.models.inventory.ProductoConIva;
+import ec.edu.ups.poo.models.purchases.SolicitudCompra;
 
 public class VentanaAgregarSolicitud extends Frame {
 

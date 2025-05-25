@@ -1,4 +1,4 @@
-package ec.edu.ups.poo.models.Interface;
+package ec.edu.ups.poo.models.interfaces;
 
 public interface Calculable {
 
