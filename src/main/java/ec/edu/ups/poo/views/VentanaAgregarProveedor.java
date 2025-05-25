@@ -4,13 +4,16 @@ import ec.edu.ups.poo.models.Datos;
 import ec.edu.ups.poo.models.Provedor;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 public class VentanaAgregarProveedor extends Frame {
 
     private TextField txtRuc, txtNombre, txtApellido, txtTelefono, txtDireccion, txtCorreo;
     private String rucActual = null;
+    private List<Provedor> provedores;
 
-    public VentanaAgregarProveedor() {
+    public VentanaAgregarProveedor(List<Provedor> provedores) {
+        this.provedores = provedores;
         setTitle("Agregar Proveedor");
         setSize(800, 450);
         setLayout(new BorderLayout(10, 10));
@@ -93,14 +96,14 @@ public class VentanaAgregarProveedor extends Frame {
             }
 
             for (Provedor p : Datos.getProvedores()) {
-                if (p.getCedula().equals(ruc)) {
+                if (p.getId().equals(ruc)) {
                     mostrarMensajeTemp("Ya existe un proveedor con ese RUC");
                     return;
                 }
             }
 
             Provedor nuevoProveedor = new Provedor(ruc, nombre, apellido, telefono, direccion, correo);
-            Datos.addProvedor(nuevoProveedor);
+            provedores.add(nuevoProveedor);
             rucActual = ruc;
 
             mostrarMensajeTemp("Proveedor agregado correctamente");

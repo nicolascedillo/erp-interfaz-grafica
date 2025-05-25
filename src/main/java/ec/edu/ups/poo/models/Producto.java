@@ -4,23 +4,23 @@ import java.util.Objects;
 
 public abstract class  Producto {
 
-    private int id;
+    private String id;
     private String nombre;
     private Double precioUnitario;
     private String marca;
 
-    public Producto(int id, String nombre, Double precioUnitario, String marca) {
+    public Producto(String id, String nombre, Double precioUnitario, String marca) {
         this.id = id;
         this.nombre = nombre;
         this.precioUnitario = precioUnitario;
         this.marca = marca;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -43,8 +43,6 @@ public abstract class  Producto {
     public String getMarca() {return marca;}
 
     public void setMarca(String marca) {this.marca = marca;}
-
-
 
     @Override
     public String toString() {

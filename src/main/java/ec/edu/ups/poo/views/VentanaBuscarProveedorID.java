@@ -13,7 +13,7 @@ public class VentanaBuscarProveedorID {
     public VentanaBuscarProveedorID(List<Provedor> proveedores) {
         this.proveedores = proveedores;
         Frame frame = new Frame("Buscar Proveedor");
-        frame.setSize(725, 600);
+        frame.setSize(725, 400);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
@@ -35,7 +35,7 @@ public class VentanaBuscarProveedorID {
         frame.add(panelSuperior, BorderLayout.NORTH);
 
         Panel panel = new Panel(new GridLayout(0, 2));
-        panel.setPreferredSize(new Dimension(725,50));
+        panel.setPreferredSize(new Dimension(600,50));
         panel.add(new Label("Ingrese el RUC del proveedor a buscar:"));
         TextField txtRUC = new TextField(10);
         panel.add(txtRUC);
@@ -51,10 +51,10 @@ public class VentanaBuscarProveedorID {
                 Provedor encontrado = buscarProveedor(ruc);
                 if (encontrado != null) {
                     Panel panelEncontrado = new Panel(new GridLayout(0, 2));
-                    panelEncontrado.setPreferredSize(new Dimension(700,180));
+                    panelEncontrado.setPreferredSize(new Dimension(600,180));
 
                     panelEncontrado.add(new Label("ID:"));
-                    TextField txtRUC = new TextField(encontrado.getCedula());
+                    TextField txtRUC = new TextField(encontrado.getId());
                     txtRUC.setEditable(false);
                     panelEncontrado.add(txtRUC);
 
@@ -112,7 +112,7 @@ public class VentanaBuscarProveedorID {
     public Provedor buscarProveedor(String cedula) {
 
         for (Provedor provedor : proveedores) {
-            if(provedor.getCedula().equals(cedula)){
+            if(provedor.getId().equals(cedula)){
                 return provedor;
             }
         }

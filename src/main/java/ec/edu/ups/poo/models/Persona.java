@@ -2,15 +2,15 @@ package ec.edu.ups.poo.models;
 
 public class Persona {
 
-    private String cedula;
+    private String id;
     private String nombre;
     private String apellido;
     private String telefono;
     private String direccion;
     private String correo;
 
-    public Persona(String cedula, String nombre, String apellido, String telefono, String direccion, String correo) {
-        this.cedula = cedula;
+    public Persona(String id, String nombre, String apellido, String telefono, String direccion, String correo) {
+        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
@@ -18,12 +18,12 @@ public class Persona {
         this.correo = correo;
     }
 
-    public String getCedula() {
-        return cedula;
+    public String getId() {
+        return id;
     }
 
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
+    public void setId(String cedula) {
+        this.id = cedula;
     }
 
     public String getNombre() {
@@ -68,7 +68,7 @@ public class Persona {
 
     @Override
     public String toString() {
-        return  "\n\t\t\t\t\t\t|| cedula='" + cedula + '\'' +
+        return  "\n\t\t\t\t\t\t|| cedula='" + id + '\'' +
                 "|| nombre='" + nombre + '\'' +
                 "|| apellido='" + apellido + '\'' +
                 "|| telefono='" + telefono + '\'' +

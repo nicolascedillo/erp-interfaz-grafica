@@ -3,7 +3,7 @@ package ec.edu.ups.poo.models;
 public class ProductoSinIva extends  Producto {
     private String motivo;
 
-    public ProductoSinIva(int id, String nombre, Double precioUnitario, String marca, String motivo) {
+    public ProductoSinIva(String id, String nombre, Double precioUnitario, String marca, String motivo) {
         super(id, nombre, precioUnitario, marca);
         this.motivo = motivo;
     }

@@ -15,7 +15,7 @@ public class VentanaBuscarProductoNombre {
     public VentanaBuscarProductoNombre(List<Producto> productos) {
         this.productos = productos;
         Frame frame = new Frame("Buscar Producto");
-        frame.setSize(725, 600);
+        frame.setSize(725, 400);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
@@ -37,7 +37,7 @@ public class VentanaBuscarProductoNombre {
         frame.add(panelSuperior, BorderLayout.NORTH);
 
         Panel panel = new Panel(new GridLayout(0, 2));
-        panel.setPreferredSize(new Dimension(725,50));
+        panel.setPreferredSize(new Dimension(600,50));
         panel.add(new Label("Ingrese el Nombre del producto a buscar:"));
         TextField txtNombre = new TextField(10);
         panel.add(txtNombre);
@@ -53,7 +53,7 @@ public class VentanaBuscarProductoNombre {
                 Producto encontrado = buscarProductoNombre(nombre);
                 if (encontrado != null) {
                     Panel panelEncontrado = new Panel(new GridLayout(0, 2));
-                    panelEncontrado.setPreferredSize(new Dimension(700,180));
+                    panelEncontrado.setPreferredSize(new Dimension(600,180));
 
                     panelEncontrado.add(new Label("ID:"));
                     TextField txtId = new TextField(String.valueOf(encontrado.getId()));
@@ -130,7 +130,7 @@ public class VentanaBuscarProductoNombre {
     public Producto buscarProductoNombre(String nombre) {
 
         for (Producto producto : productos) {
-            if(producto.getNombre().equals(nombre)){
+            if(producto.getNombre().equalsIgnoreCase(nombre)){
                 return producto;
             }
         }

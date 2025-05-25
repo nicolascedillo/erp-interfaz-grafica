@@ -40,7 +40,7 @@ public class VentanaCambiarEstadoSolicitud {
         frame.add(panelSuperior, BorderLayout.NORTH);
 
         Panel panel = new Panel(new GridLayout(0, 2));
-        panel.setPreferredSize(new Dimension(725,50));
+        panel.setPreferredSize(new Dimension(725, 50));
         panel.add(new Label("Ingrese el ID de la solicitud a buscar:"));
         TextField txtId = new TextField(10);
         panel.add(txtId);
@@ -56,21 +56,11 @@ public class VentanaCambiarEstadoSolicitud {
         botonBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String idStr = txtId.getText();
-                int id = 0;
-                boolean esNumero = true;
-                for (int i = 0; i < idStr.length(); i++) {
-                    if (!Character.isDigit(idStr.charAt(i))) {
-                        esNumero = false;
-                        break;
-                    }
-                }
+                String id = txtId.getText().trim();
 
-                if (!esNumero || idStr.isEmpty()) {
+                if (id.isEmpty()) {
                     mostrarMensajeTempError(frame, "Por favor ingrese un ID válido.");
                     return;
-                } else {
-                    id = Integer.parseInt(idStr);
                 }
 
                 SolicitudCompra encontrado = buscarPorID(id);
@@ -78,10 +68,10 @@ public class VentanaCambiarEstadoSolicitud {
 
                 if (encontrado != null) {
                     Panel panelEncontrado = new Panel(new GridLayout(0, 2));
-                    panelEncontrado.setPreferredSize(new Dimension(500,400));
+                    panelEncontrado.setPreferredSize(new Dimension(500, 400));
 
                     panelEncontrado.add(new Label("ID:"));
-                    TextField txtID = new TextField(String.valueOf(encontrado.getId()));
+                    TextField txtID = new TextField(encontrado.getId());
                     txtID.setEditable(false);
                     panelEncontrado.add(txtID);
 
@@ -113,7 +103,7 @@ public class VentanaCambiarEstadoSolicitud {
                     panelEncontrado.add(detalles);
                     panelEncontrado.add(new Label("---------------------------------------------------------------------------------"));
                     int cont = 1;
-                    for (DetalleSolicitud detalle: encontrado.getDetalles()) {
+                    for (DetalleSolicitud detalle : encontrado.getDetalles()) {
 
                         panelEncontrado.add(new Label(cont + " ---Id:"));
                         TextField txtIdDetalle = new TextField(String.valueOf(detalle.getId()));
@@ -197,7 +187,7 @@ public class VentanaCambiarEstadoSolicitud {
                     frame.revalidate();
 
                 } else {
-                    mostrarMensajeTempError(frame, "No se encontró la solicitud con ID: " + txtId.getText());
+                    mostrarMensajeTempError(frame, "No se encontró la solicitud con ID: " + id);
                     frame.revalidate();
                 }
             }
@@ -205,7 +195,7 @@ public class VentanaCambiarEstadoSolicitud {
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent windowEvent){
+            public void windowClosing(WindowEvent windowEvent) {
                 frame.dispose();
             }
         });
@@ -213,7 +203,7 @@ public class VentanaCambiarEstadoSolicitud {
         frame.setVisible(true);
     }
 
-    private void mostrarMensajeTempEstado(Frame frame, String mensaje){
+    private void mostrarMensajeTempEstado(Frame frame, String mensaje) {
         Dialog dialogo = new Dialog(frame, "Mensaje", true);
         Label label = new Label(mensaje, Label.CENTER);
         label.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -231,7 +221,7 @@ public class VentanaCambiarEstadoSolicitud {
         dialogo.setVisible(true);
     }
 
-    private void mostrarMensajeTempError(Frame frame, String mensaje){
+    private void mostrarMensajeTempError(Frame frame, String mensaje) {
         Dialog dialogo = new Dialog(frame, "Mensaje", true);
         Label label = new Label(mensaje, Label.CENTER);
         label.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -249,9 +239,9 @@ public class VentanaCambiarEstadoSolicitud {
         dialogo.setVisible(true);
     }
 
-    public SolicitudCompra buscarPorID(int id) {
+    public SolicitudCompra buscarPorID(String id) {
         for (SolicitudCompra solicitud : solicitudes) {
-            if(solicitud.getId() == id) {
+            if (solicitud.getId().equals(id)) {
                 return solicitud;
             }
         }

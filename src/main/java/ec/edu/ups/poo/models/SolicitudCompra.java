@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class SolicitudCompra implements Calculable {
 
-    private int id;
+    private String id;
     private GregorianCalendar fecha;
     private String comentario;
     private Empleado empleadoSolicitante;
@@ -21,7 +21,7 @@ public class SolicitudCompra implements Calculable {
     private double iva;
     private double total;
 
-    public SolicitudCompra(int id, GregorianCalendar fecha, String comentario, Empleado empleadoSolicitante, EstadoSolicitud estado) {
+    public SolicitudCompra(String id, GregorianCalendar fecha, String comentario, Empleado empleadoSolicitante, EstadoSolicitud estado) {
         this.id = id;
         this.fecha = fecha;
         this.comentario = comentario;
@@ -54,7 +54,7 @@ public class SolicitudCompra implements Calculable {
         this.subTotal = subtotal;
     }
 
-    public void addDetalle(int id, Producto itemProducto, int cantidad, String observacion) {
+    public void addDetalle(String id, Producto itemProducto, int cantidad, String observacion) {
         detalles.add(new DetalleSolicitud(id, itemProducto, cantidad, observacion));
         calcularIva();
         calcularSubTotal();
@@ -101,11 +101,11 @@ public class SolicitudCompra implements Calculable {
         this.fecha = fecha;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

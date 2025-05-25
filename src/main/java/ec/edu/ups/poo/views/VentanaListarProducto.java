@@ -1,13 +1,14 @@
 package ec.edu.ups.poo.views;
 
+import ec.edu.ups.poo.models.Datos;
 import ec.edu.ups.poo.models.Producto;
 import ec.edu.ups.poo.models.ProductoConIva;
 import ec.edu.ups.poo.models.ProductoSinIva;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.awt.*;
+import java.util.List;
 
 public class VentanaListarProducto {
 
@@ -43,7 +44,7 @@ public class VentanaListarProducto {
             panel.setPreferredSize(new Dimension(700,180));
 
             panel.add(new Label("ID:"));
-            TextField txtId = new TextField(String.valueOf(producto.getId()));
+            TextField txtId = new TextField(producto.getId());
             txtId.setEditable(false);
             panel.add(txtId);
 

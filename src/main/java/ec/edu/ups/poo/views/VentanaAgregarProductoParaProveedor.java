@@ -97,7 +97,7 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
 
             Provedor proveedor = null;
             for (Provedor p : Datos.getProvedores()) {
-                if (p.getCedula().equals(cedula)) {
+                if (p.getId().equals(cedula)) {
                     proveedor = p;
                     break;
                 }
@@ -108,7 +108,7 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
                 return;
             }
 
-            int id = Integer.parseInt(idStr);
+            String id = idStr;
             double precioUnitario = Double.parseDouble(precioStr.replace(",", "."));
 
             Producto producto;

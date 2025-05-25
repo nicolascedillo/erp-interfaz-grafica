@@ -4,14 +4,20 @@ import ec.edu.ups.poo.models.*;
 import ec.edu.ups.poo.models.enums.Feriado;
 
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VentanaAgregarProducto extends Frame {
 
-    public VentanaAgregarProducto() {
+    private List<Producto> productos;
+    private List<Provedor> provedor;
+
+    public VentanaAgregarProducto(List<Producto> productos,List<Provedor> provedor, String idGenerado) {
+        this.productos = productos;
+        this.provedor = provedor;
         setTitle("Agregar Producto");
-        setSize(800, 400);
+        setSize(800, 450);
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
@@ -48,7 +54,8 @@ public class VentanaAgregarProducto extends Frame {
         panelForm.add(txtCategoria);
 
         panelForm.add(new Label("ID:"));
-        TextField txtId = new TextField();
+        TextField txtId = new TextField(idGenerado);
+        txtId.setEditable(false);
         panelForm.add(txtId);
 
         panelForm.add(new Label("Nombre:"));
@@ -64,99 +71,132 @@ public class VentanaAgregarProducto extends Frame {
         panelForm.add(txtMarca);
 
         panelForm.add(new Label("Proveedor (Cédula):"));
-        TextField txtCedulaProveedor = new TextField();
-        panelForm.add(txtCedulaProveedor);
+        Choice choiceProvedor = new Choice();
+        choiceProvedor.add("");
 
+        for (Provedor p : provedor) {
+            choiceProvedor.addItem(p.getNombre() +" (" + p.getId() + ")");
+        }
+        panelForm.add(choiceProvedor);
         panelForm.add(new Label(""));
 
         Panel panelBoton = new Panel(new FlowLayout(FlowLayout.CENTER));
+
         Button btnRegistrar = new Button("Registrar Producto");
         btnRegistrar.setPreferredSize(new Dimension(180, 30));
         panelBoton.add(btnRegistrar);
+
+        Button btnNuevoProducto = new Button("Nuevo Producto");
+        btnNuevoProducto.setPreferredSize(new Dimension(180, 30));
+        panelBoton.add(btnNuevoProducto);
+
         panelForm.add(panelBoton);
+
+        btnNuevoProducto.addActionListener(e -> {
+            txtId.setEditable(false);
+            txtCategoria.setEditable(true);
+            txtNombre.setEditable(true);
+            txtPrecioUnitario.setEditable(true);
+            txtMarca.setEditable(true);
+            choiceProvedor.setEnabled(true);
+
+            txtId.setText(generarSiguienteIdProducto());
+            txtCategoria.setText("");
+            txtNombre.setText("");
+            txtPrecioUnitario.setText("");
+            txtMarca.setText("");
+            choiceProvedor.select(0);
+        });
+
 
         panelCentro.add(panelForm);
         add(panelCentro, BorderLayout.CENTER);
 
         btnRegistrar.addActionListener(e -> {
+
             String categoria = txtCategoria.getText().trim();
             String idStr = txtId.getText().trim();
             String nombre = txtNombre.getText().trim();
             String precioStr = txtPrecioUnitario.getText().trim();
             String marca = txtMarca.getText().trim();
-            String cedula = txtCedulaProveedor.getText().trim();
+            String idProvedor = obtenerIdProvedorChoice(choiceProvedor);
 
-            if (categoria.isEmpty() || idStr.isEmpty() || nombre.isEmpty() || precioStr.isEmpty() || marca.isEmpty() || cedula.isEmpty()) {
+            // Validar vacios
+            if (categoria.isEmpty() || nombre.isEmpty() || precioStr.isEmpty() || marca.isEmpty() || choiceProvedor.getSelectedIndex() == 0) {
                 mostrarMensajeTemp("Todos los campos son obligatorios");
                 return;
             }
 
-            boolean esIdNumero = true;
-            boolean esPrecioNumero = true;
-            for (int i = 0; i < idStr.length(); i++) {
-                if (!Character.isDigit(idStr.charAt(i))) {
-                    esIdNumero = false;
+            // Validar que precio
+            String precioStrAux = precioStr.replace(',', '.');
+
+            boolean esPrecioValido = true;
+            int contadorPuntos = 0;
+
+            for (int i = 0; i < precioStrAux.length(); i++) {
+                char c = precioStrAux.charAt(i);
+                if (Character.isDigit(c)) {
+                    continue;
+                } else if (c == '.') {
+                    contadorPuntos++;
+                    if (contadorPuntos > 1) {
+                        esPrecioValido = false;
+                        break;
+                    }
+                } else {
+                    esPrecioValido = false;
                     break;
                 }
             }
-            String precioStrAux = precioStr.replace(",", ".");
-            int puntoCount = 0;
-            for (int i = 0; i < precioStrAux.length(); i++) {
-                char c = precioStrAux.charAt(i);
-                if (!Character.isDigit(c)) {
-                    if (c == '.' && puntoCount == 0) {
-                        puntoCount++;
-                    } else {
-                        esPrecioNumero = false;
-                        break;
-                    }
-                }
-            }
 
-            if (!esIdNumero || !esPrecioNumero) {
-                mostrarMensajeTemp("ID y Precio deben ser numéricos");
+            if (!esPrecioValido) {
+                mostrarMensajeTemp("El precio debe ser numérico");
                 return;
             }
 
+            // Buscar proveedor por id (cédula)
             Provedor temp = null;
-            for (Provedor p : Datos.getProvedores()) {
-                if (p.getCedula().equals(cedula)) {
+            for (Provedor p : provedor) {
+                if (p.getId().equals(idProvedor)) {
                     temp = p;
                     break;
                 }
             }
+
             if (temp == null) {
-                mostrarMensajeTemp("Ingrese la cédula de un proveedor para registrar el producto");
+                mostrarMensajeTemp("Ingrese la cédula de un proveedor existente para registrar el producto");
                 return;
             }
 
-            int id = Integer.parseInt(idStr);
             double precioUnitario = Double.parseDouble(precioStrAux);
 
             Producto producto;
+
             switch (categoria) {
                 case "Comida":
                 case "Primera_necesidad":
                 case "Agricola":
                 case "Medicina":
                 case "Escolar":
-                    producto = new ProductoSinIva(id, nombre, precioUnitario, marca, "El producto no agraba iva");
+                    producto = new ProductoSinIva(idStr, nombre, precioUnitario, marca, "El producto no grava iva");
                     break;
                 default:
-                    producto = new ProductoConIva(id, nombre, precioUnitario, marca, Feriado.NO_FERIADO);
+                    producto = new ProductoConIva(idStr, nombre, precioUnitario, marca, Feriado.NO_FERIADO);
                     break;
             }
-            Datos.getProductos().add(producto);
+
+            productos.add(producto);
             temp.addProducto(producto);
 
             mostrarMensajeTemp("Producto registrado y vinculado a proveedor");
 
-            txtCategoria.setText("");
-            txtId.setText("");
-            txtNombre.setText("");
-            txtPrecioUnitario.setText("");
-            txtMarca.setText("");
-            txtCedulaProveedor.setText("");
+            txtId.setEditable(false);
+            txtCategoria.setEditable(false);
+            txtNombre.setEditable(false);
+            txtPrecioUnitario.setEditable(false);
+            txtMarca.setEditable(false);
+            choiceProvedor.setEnabled(false);
+
         });
 
         setVisible(true);
@@ -165,7 +205,7 @@ public class VentanaAgregarProducto extends Frame {
     private void mostrarMensajeTemp(String mensaje) {
         Dialog dialogo = new Dialog(this, "Mensaje", true);
         dialogo.setLayout(new BorderLayout(10, 10));
-        dialogo.setSize(350, 120);
+        dialogo.setSize(400, 120);
         dialogo.setLocationRelativeTo(this);
 
         Panel panelMensaje = new Panel();
@@ -180,4 +220,31 @@ public class VentanaAgregarProducto extends Frame {
         dialogo.add(panelBoton, BorderLayout.SOUTH);
         dialogo.setVisible(true);
     }
+
+    private String generarSiguienteIdProducto() {
+        int max = 0;
+        for (Producto p : Datos.getProductos()) {
+            String id = p.getId();
+            if (id.startsWith("PD-")) {
+                try {
+                    int num = Integer.parseInt(id.substring(3));
+                    if (num > max) {
+                        max = num;
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return String.format("PD-%03d", max + 1);
+    }
+
+    private String obtenerIdProvedorChoice(Choice choiceProvedor) {
+        String seleccionado = choiceProvedor.getSelectedItem();
+        int inicio = seleccionado.indexOf('(');
+        int fin = seleccionado.indexOf(')');
+        if (inicio != -1 && fin != -1 && inicio < fin) {
+            return seleccionado.substring(inicio + 1, fin).trim();
+        }
+        return "";
+    }
+
 }

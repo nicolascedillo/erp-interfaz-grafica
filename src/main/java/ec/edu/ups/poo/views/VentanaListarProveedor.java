@@ -43,7 +43,7 @@ public class VentanaListarProveedor {
             panel.setPreferredSize(new Dimension(700,180));
 
             panel.add(new Label("RUC:"));
-            TextField txtRUC = new TextField(provedor.getCedula());
+            TextField txtRUC = new TextField(provedor.getId());
             txtRUC.setEditable(false);
             panel.add(txtRUC);
 

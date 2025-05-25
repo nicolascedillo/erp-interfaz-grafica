@@ -6,14 +6,14 @@ import java.util.Objects;
 
 public class DetalleSolicitud implements Calculable {
 
-    private int id;
+    private String id;
     private Producto itemProducto;
     private int cantidad;
     private String observacion;
     private Double IVAdetalle;
     private Double SubTotalDetalle;
 
-    public DetalleSolicitud(int id, Producto itemProducto, int cantidad, String observacion) {
+    public DetalleSolicitud(String id, Producto itemProducto, int cantidad, String observacion) {
         this.id = id;
         this.itemProducto = itemProducto;
         this.cantidad = cantidad;
@@ -22,11 +22,11 @@ public class DetalleSolicitud implements Calculable {
         calcularIva();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

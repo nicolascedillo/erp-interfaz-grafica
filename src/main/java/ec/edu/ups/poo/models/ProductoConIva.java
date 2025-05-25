@@ -5,7 +5,7 @@ import ec.edu.ups.poo.models.enums.Feriado;
 public class ProductoConIva extends Producto {
     private Feriado festividad;
 
-    public ProductoConIva(int id, String nombre, Double precioUnitario, String marca, Feriado festividad) {
+    public ProductoConIva(String id, String nombre, Double precioUnitario, String marca, Feriado festividad) {
         super(id, nombre, precioUnitario, marca);
         this.festividad = festividad;
     }

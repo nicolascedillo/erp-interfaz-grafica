@@ -14,7 +14,7 @@ public class VentanaBuscarSolicitudID {
         this.solicitudes = solicitudes;
 
         Frame frame = new Frame("Buscar Solicitud");
-        frame.setSize(725, 600);
+        frame.setSize(725, 400);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
@@ -36,7 +36,7 @@ public class VentanaBuscarSolicitudID {
         frame.add(panelSuperior, BorderLayout.NORTH);
 
         Panel panel = new Panel(new GridLayout(0, 2));
-        panel.setPreferredSize(new Dimension(725,50));
+        panel.setPreferredSize(new Dimension(600,50));
         panel.add(new Label("Ingrese el ID de la solicitud a buscar:"));
         TextField txtId = new TextField(10);
         panel.add(txtId);
@@ -48,11 +48,11 @@ public class VentanaBuscarSolicitudID {
         botonBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int id = Integer.parseInt(txtId.getText());
+                String id = txtId.getText();
                 SolicitudCompra encontrado = buscarPorID(id);
                 if (encontrado != null) {
                     Panel panelEncontrado = new Panel(new GridLayout(0, 2));
-                    panelEncontrado.setPreferredSize(new Dimension(500,400));
+                    panelEncontrado.setPreferredSize(new Dimension(400,400));
 
                     panelEncontrado.add(new Label("ID:"));
                     TextField txtID = new TextField(String.valueOf(encontrado.getId()));
@@ -155,10 +155,10 @@ public class VentanaBuscarSolicitudID {
 
     }
 
-    public SolicitudCompra buscarPorID(int id) {
+    public SolicitudCompra buscarPorID(String id) {
 
         for (SolicitudCompra solicitud : solicitudes) {
-            if(solicitud.getId() == id) {
+            if(solicitud.getId().equalsIgnoreCase(id)) {
                 return solicitud;
             }
         }
