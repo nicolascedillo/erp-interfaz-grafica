@@ -12,11 +12,12 @@ import java.util.List;
 
 public class VentanaBuscarSolicitudEstado {
     private List<SolicitudCompra> solicitudes;
+    private Frame frame;
 
     public VentanaBuscarSolicitudEstado(List<SolicitudCompra> solicitudes) {
         this.solicitudes = solicitudes;
 
-        Frame frame = new Frame("Buscar Solicitud");
+        frame = new Frame("Buscar Solicitud");
         frame.setSize(725, 600);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
@@ -38,25 +39,36 @@ public class VentanaBuscarSolicitudEstado {
         });
         frame.add(panelSuperior, BorderLayout.NORTH);
 
-        Panel panelCentral = new Panel(new GridLayout(2, 2,10,10));
-        panelCentral.setPreferredSize(new Dimension(600,50));
+        Panel panelCentral = new Panel(new GridLayout(2, 2, 10, 10));
+        panelCentral.setPreferredSize(new Dimension(600, 50));
         panelCentral.add(new Label("Ingrese el Estado de la solicitud a buscar:"));
 
         Choice listaEstado = new Choice();
+        listaEstado.addItem("");
         listaEstado.addItem("SOLICITADA");
         listaEstado.addItem("APROVADA");
         listaEstado.addItem("EN_REVISION");
         listaEstado.addItem("RECHAZADA");
         panelCentral.add(listaEstado);
 
+        listaEstado.select(0);
+
         Button botonBuscar = new Button("Buscar");
         Panel panelBuscar = new Panel(new FlowLayout(FlowLayout.RIGHT));
         panelBuscar.add(botonBuscar);
         panelCentral.add(panelBuscar);
+
         botonBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EstadoSolicitud estado = EstadoSolicitud.valueOf(listaEstado.getSelectedItem());
+                String estadoSeleccionado = listaEstado.getSelectedItem();
+
+                if (estadoSeleccionado.equals("")) {
+                    mostrarMensajeTempAmarillo("Por favor seleccione un estado válido.");
+                    return;
+                }
+
+                EstadoSolicitud estado = EstadoSolicitud.valueOf(estadoSeleccionado);
                 List<SolicitudCompra> encontrados = buscarPorEstado(estado);
 
                 if (!encontrados.isEmpty()) {
@@ -95,9 +107,9 @@ public class VentanaBuscarSolicitudEstado {
                         detalles.setFont(new Font("Arial", Font.BOLD, 12));
                         panelEncontrado.add(detalles);
                         panelEncontrado.add(new Label("---------------------------------------------------------------------------------"));
+
                         int cont = 1;
                         for (DetalleSolicitud detalle : encontrado.getDetalles()) {
-
                             panelEncontrado.add(new Label(cont + " ---Id:"));
                             TextField txtIdDetalle = new TextField(String.valueOf(detalle.getId()));
                             txtIdDetalle.setEditable(false);
@@ -152,33 +164,94 @@ public class VentanaBuscarSolicitudEstado {
                         panelResultados.add(panelEncontrado);
                     }
 
-
                     ScrollPane scroll = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
                     scroll.setPreferredSize(new Dimension(700, 500));
                     scroll.add(panelResultados);
                     panelPrincipal.removeAll();
-
                     panelPrincipal.add(scroll);
 
-
                 } else {
-
-                    Label mensaje = new Label("No se encontró la solicitud con Estado: " + estado);
-                    panelPrincipal.removeAll();
-                    panelPrincipal.add(mensaje);
-
-
+                    mostrarMensajeTempRojo("No existe solicitud con estado: " + estadoSeleccionado);
                 }
 
                 frame.revalidate();
-
+                frame.repaint();
             }
         });
 
         panelPrincipal.add(panelCentral);
         frame.add(panelPrincipal, BorderLayout.CENTER);
         frame.setVisible(true);
+    }
 
+    private void mostrarMensajeTempRojo(String mensaje) {
+        Dialog dialogo = new Dialog(frame, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(frame);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(220, 53, 69));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(Color.WHITE);
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private void mostrarMensajeTempAmarillo(String mensaje) {
+        Dialog dialogo = new Dialog(frame, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(frame);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(255, 193, 7));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(Color.WHITE);
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
     }
 
     public List<SolicitudCompra> buscarPorEstado(EstadoSolicitud estado) {

@@ -15,11 +15,11 @@ public class VentanaListarProducto {
     public VentanaListarProducto(List<Producto> productos) {
 
         Frame frame = new Frame("Lista de Productos");
-        frame.setSize(800, 600);
+        frame.setSize(750, 600);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
-        Panel panelPrincipal = new Panel(new FlowLayout(FlowLayout.LEFT));
+        Panel panelPrincipal = new Panel(new FlowLayout(FlowLayout.CENTER));
         Label titulo = new Label("Listar Productos");
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         Panel panelSuperior = new Panel(new FlowLayout());
@@ -37,11 +37,11 @@ public class VentanaListarProducto {
 
         ScrollPane scrollPane = new ScrollPane (ScrollPane.SCROLLBARS_AS_NEEDED);
         scrollPane.setSize(580, 350);
-        panelPrincipal.setPreferredSize(new Dimension(560, productos.size() * 200));
+        panelPrincipal.setPreferredSize(new Dimension(580, productos.size() * 200));
 
         for (Producto producto: productos){
             Panel panel = new Panel(new GridLayout(0, 2));
-            panel.setPreferredSize(new Dimension(700,180));
+            panel.setPreferredSize(new Dimension(650,180));
 
             panel.add(new Label("ID:"));
             TextField txtId = new TextField(producto.getId());

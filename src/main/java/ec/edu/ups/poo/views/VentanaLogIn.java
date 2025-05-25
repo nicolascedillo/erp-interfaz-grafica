@@ -69,6 +69,12 @@ public class VentanaLogIn extends Frame {
     }
 
     public boolean validarUsuario(){
+
+        if (txtUsuarioCorre.getText().isEmpty() || txtContrasena.getText().isEmpty()) {
+            mostrarMensajeTempAmarillo("Por favor, complete todos los campos.");
+            return false;
+        }
+
         if (txtUsuarioCorre.getText().equals(Datos.getNicolas().getUsername()) &&
                 txtContrasena.getText().equals(Datos.getNicolas().getPassword())) {
 
@@ -81,26 +87,77 @@ public class VentanaLogIn extends Frame {
             Datos.setEmpleadoLogueado(Datos.getMateo());
             return true;
         }
-        mostrarMensajeTemp("Usuario o contraseña Incorrecto");
+        mostrarMensajeTempRojo("Usuario o contraseña Incorrecto");
         return false;
     }
 
-    private void mostrarMensajeTemp(String mensaje) {
-        Dialog dialogo = new Dialog(this, "Mensaje", true);
-        dialogo.setLayout(new BorderLayout(10, 10));
-        dialogo.setSize(350, 120);
+    private void mostrarMensajeTempRojo(String mensaje) {
+        Dialog dialogo = new Dialog(this, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
         dialogo.setLocationRelativeTo(this);
 
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(220, 53, 69));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(Color.WHITE);
+        panelTitulo.add(lblTitulo);
+
         Panel panelMensaje = new Panel();
-        panelMensaje.add(new Label(mensaje, Label.CENTER));
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
 
         Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
         Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
         btnAceptar.addActionListener(e -> dialogo.dispose());
         panelBoton.add(btnAceptar);
 
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
         dialogo.add(panelMensaje, BorderLayout.CENTER);
         dialogo.add(panelBoton, BorderLayout.SOUTH);
+
         dialogo.setVisible(true);
     }
+
+    private void mostrarMensajeTempAmarillo(String mensaje) {
+        Dialog dialogo = new Dialog(this, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(this);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(255, 233, 154));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
 }

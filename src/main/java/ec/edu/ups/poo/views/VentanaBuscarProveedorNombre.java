@@ -8,11 +8,12 @@ import java.util.List;
 
 public class VentanaBuscarProveedorNombre {
     private List<Provedor> proveedores;
+    private Frame frame;
 
     public VentanaBuscarProveedorNombre(List<Provedor> proveedores) {
         this.proveedores = proveedores;
-        Frame frame = new Frame("Buscar Proveedor");
-        frame.setSize(650, 400);
+        frame = new Frame("Buscar Proveedor");
+        frame.setSize(725, 300);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
@@ -92,11 +93,7 @@ public class VentanaBuscarProveedorNombre {
                     frame.revalidate();
 
                 } else{
-
-                    Label txtNoEncontrado = new  Label("No existe proveedor con el nombre: " + nombre);
-                    panelPrincipal.removeAll();
-                    panelPrincipal.add(txtNoEncontrado);
-                    frame.revalidate();
+                    mostrarMensajeTempRojo("No existe proveedor con nombre: " + nombre);
 
                 }
             }
@@ -108,6 +105,40 @@ public class VentanaBuscarProveedorNombre {
 
     }
 
+    private void mostrarMensajeTempRojo(String mensaje) {
+        Dialog dialogo = new Dialog(frame, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(frame);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(220, 53, 69));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(Color.WHITE);
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
 
     public Provedor buscarPorNombre(String nombre) {
 

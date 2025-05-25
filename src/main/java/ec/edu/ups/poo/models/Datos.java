@@ -112,8 +112,6 @@ public class Datos {
         productos.add(producto);
     }
 
-
-
     public static List<Provedor> getProvedores() {
         return provedores;
     }

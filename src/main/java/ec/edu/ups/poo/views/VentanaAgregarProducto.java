@@ -3,6 +3,7 @@ package ec.edu.ups.poo.views;
 import ec.edu.ups.poo.models.*;
 import ec.edu.ups.poo.models.enums.Feriado;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -93,116 +94,116 @@ public class VentanaAgregarProducto extends Frame {
 
         panelForm.add(panelBoton);
 
-        btnNuevoProducto.addActionListener(e -> {
-            txtId.setEditable(false);
-            txtCategoria.setEditable(true);
-            txtNombre.setEditable(true);
-            txtPrecioUnitario.setEditable(true);
-            txtMarca.setEditable(true);
-            choiceProvedor.setEnabled(true);
+        btnNuevoProducto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtId.setEditable(false);
+                txtCategoria.setEditable(true);
+                txtNombre.setEditable(true);
+                txtPrecioUnitario.setEditable(true);
+                txtMarca.setEditable(true);
+                choiceProvedor.setEnabled(true);
 
-            txtId.setText(generarSiguienteIdProducto());
-            txtCategoria.setText("");
-            txtNombre.setText("");
-            txtPrecioUnitario.setText("");
-            txtMarca.setText("");
-            choiceProvedor.select(0);
-            btnNuevoProducto.setEnabled(false);
-            btnRegistrar.setEnabled(true);
+                txtId.setText(generarSiguienteIdProducto());
+                txtCategoria.setText("");
+                txtNombre.setText("");
+                txtPrecioUnitario.setText("");
+                txtMarca.setText("");
+                choiceProvedor.select(0);
+                btnNuevoProducto.setEnabled(false);
+                btnRegistrar.setEnabled(true);
+            }
         });
 
 
         panelCentro.add(panelForm);
         add(panelCentro, BorderLayout.CENTER);
 
-        btnRegistrar.addActionListener(e -> {
+        btnRegistrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String categoria = txtCategoria.getText().trim();
+                String idStr = txtId.getText().trim();
+                String nombre = txtNombre.getText().trim();
+                String precioStr = txtPrecioUnitario.getText().trim();
+                String marca = txtMarca.getText().trim();
+                String idProvedor = obtenerIdProvedorChoice(choiceProvedor);
 
-            String categoria = txtCategoria.getText().trim();
-            String idStr = txtId.getText().trim();
-            String nombre = txtNombre.getText().trim();
-            String precioStr = txtPrecioUnitario.getText().trim();
-            String marca = txtMarca.getText().trim();
-            String idProvedor = obtenerIdProvedorChoice(choiceProvedor);
+                if (categoria.isEmpty() || nombre.isEmpty() || precioStr.isEmpty() || marca.isEmpty() || choiceProvedor.getSelectedIndex() == 0) {
+                    mostrarMensajeTempAmarillo("Todos los campos son obligatorios");
+                    return;
+                }
 
-            // Validar vacios
-            if (categoria.isEmpty() || nombre.isEmpty() || precioStr.isEmpty() || marca.isEmpty() || choiceProvedor.getSelectedIndex() == 0) {
-                mostrarMensajeTemp("Todos los campos son obligatorios");
-                return;
-            }
+                String precioStrAux = precioStr.replace(',', '.');
+                boolean esPrecioValido = true;
+                int contadorPuntos = 0;
 
-            // Validar que precio
-            String precioStrAux = precioStr.replace(',', '.');
-
-            boolean esPrecioValido = true;
-            int contadorPuntos = 0;
-
-            for (int i = 0; i < precioStrAux.length(); i++) {
-                char c = precioStrAux.charAt(i);
-                if (Character.isDigit(c)) {
-                    continue;
-                } else if (c == '.') {
-                    contadorPuntos++;
-                    if (contadorPuntos > 1) {
+                for (int i = 0; i < precioStrAux.length(); i++) {
+                    char c = precioStrAux.charAt(i);
+                    if (Character.isDigit(c)) {
+                        continue;
+                    } else if (c == '.') {
+                        contadorPuntos++;
+                        if (contadorPuntos > 1) {
+                            esPrecioValido = false;
+                            break;
+                        }
+                    } else {
                         esPrecioValido = false;
                         break;
                     }
-                } else {
-                    esPrecioValido = false;
-                    break;
                 }
-            }
 
-            if (!esPrecioValido) {
-                mostrarMensajeTemp("El precio debe ser numérico");
-                return;
-            }
-
-            // Buscar proveedor por id (cédula)
-            Provedor temp = null;
-            for (Provedor p : provedor) {
-                if (p.getId().equals(idProvedor)) {
-                    temp = p;
-                    break;
+                if (!esPrecioValido) {
+                    mostrarMensajeTempAmarillo("El precio debe ser numérico");
+                    return;
                 }
+
+                Provedor temp = null;
+                for (Provedor p : provedor) {
+                    if (p.getId().equals(idProvedor)) {
+                        temp = p;
+                        break;
+                    }
+                }
+
+                if (temp == null) {
+                    mostrarMensajeTempAmarillo("Ingrese la cédula de un proveedor existente para registrar el producto");
+                    return;
+                }
+
+                double precioUnitario = Double.parseDouble(precioStrAux);
+
+                Producto producto;
+
+                switch (categoria) {
+                    case "Comida":
+                    case "Primera_necesidad":
+                    case "Agricola":
+                    case "Medicina":
+                    case "Escolar":
+                        producto = new ProductoSinIva(idStr, nombre, precioUnitario, marca, "El producto no grava iva");
+                        break;
+                    default:
+                        producto = new ProductoConIva(idStr, nombre, precioUnitario, marca, Feriado.NO_FERIADO);
+                        break;
+                }
+
+                productos.add(producto);
+                temp.addProducto(producto);
+
+                mostrarMensajeTempVerde("Producto registrado y vinculado a proveedor");
+
+                txtId.setEditable(false);
+                txtCategoria.setEditable(false);
+                txtNombre.setEditable(false);
+                txtPrecioUnitario.setEditable(false);
+                txtMarca.setEditable(false);
+                choiceProvedor.setEnabled(false);
+
+                btnRegistrar.setEnabled(false);
+                btnNuevoProducto.setEnabled(true);
             }
-
-            if (temp == null) {
-                mostrarMensajeTemp("Ingrese la cédula de un proveedor existente para registrar el producto");
-                return;
-            }
-
-            double precioUnitario = Double.parseDouble(precioStrAux);
-
-            Producto producto;
-
-            switch (categoria) {
-                case "Comida":
-                case "Primera_necesidad":
-                case "Agricola":
-                case "Medicina":
-                case "Escolar":
-                    producto = new ProductoSinIva(idStr, nombre, precioUnitario, marca, "El producto no grava iva");
-                    break;
-                default:
-                    producto = new ProductoConIva(idStr, nombre, precioUnitario, marca, Feriado.NO_FERIADO);
-                    break;
-            }
-
-            productos.add(producto);
-            temp.addProducto(producto);
-
-            mostrarMensajeTemp("Producto registrado y vinculado a proveedor");
-
-            txtId.setEditable(false);
-            txtCategoria.setEditable(false);
-            txtNombre.setEditable(false);
-            txtPrecioUnitario.setEditable(false);
-            txtMarca.setEditable(false);
-            choiceProvedor.setEnabled(false);
-
-            btnRegistrar.setEnabled(false);
-            btnNuevoProducto.setEnabled(true);
-
         });
 
         setVisible(true);
@@ -224,6 +225,74 @@ public class VentanaAgregarProducto extends Frame {
 
         dialogo.add(panelMensaje, BorderLayout.CENTER);
         dialogo.add(panelBoton, BorderLayout.SOUTH);
+        dialogo.setVisible(true);
+    }
+
+    private void mostrarMensajeTempAmarillo(String mensaje) {
+        Dialog dialogo = new Dialog(this, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(this);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(255, 233, 154));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private void mostrarMensajeTempVerde(String mensaje) {
+        Dialog dialogo = new Dialog(this, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(this);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(22, 196, 127));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
         dialogo.setVisible(true);
     }
 

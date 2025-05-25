@@ -13,11 +13,12 @@ import java.awt.event.ActionListener;
 
 public class VentanaCambiarEstadoSolicitud {
     private List<SolicitudCompra> solicitudes;
+    private Frame frame;
 
     public VentanaCambiarEstadoSolicitud(List<SolicitudCompra> solicitudes) {
         this.solicitudes = solicitudes;
 
-        Frame frame = new Frame("Cambiar Estado de Solicitud");
+        frame = new Frame("Cambiar Estado de Solicitud");
         frame.setSize(750, 650);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
@@ -59,7 +60,7 @@ public class VentanaCambiarEstadoSolicitud {
                 String id = txtId.getText().trim();
 
                 if (id.isEmpty()) {
-                    mostrarMensajeTempError(frame, "Por favor ingrese un ID válido.");
+                    mostrarMensajeTempAmarillo("Por favor ingrese un ID válido.");
                     return;
                 }
 
@@ -177,7 +178,7 @@ public class VentanaCambiarEstadoSolicitud {
                             String nuevoEstado = choiceEstado.getSelectedItem();
                             encontrado.setEstado(EstadoSolicitud.valueOf(nuevoEstado.toUpperCase()));
                             txtEstado.setText(nuevoEstado);
-                            mostrarMensajeTempEstado(frame, "Estado cambiado a: " + nuevoEstado);
+                            mostrarMensajeTempVerde(frame, "Estado cambiado a: " + nuevoEstado);
                         }
                     });
 
@@ -187,7 +188,7 @@ public class VentanaCambiarEstadoSolicitud {
                     frame.revalidate();
 
                 } else {
-                    mostrarMensajeTempError(frame, "No se encontró la solicitud con ID: " + id);
+                    mostrarMensajeTempRojo("No se encontró la solicitud con ID: " + id);
                     frame.revalidate();
                 }
             }
@@ -203,39 +204,110 @@ public class VentanaCambiarEstadoSolicitud {
         frame.setVisible(true);
     }
 
-    private void mostrarMensajeTempEstado(Frame frame, String mensaje) {
-        Dialog dialogo = new Dialog(frame, "Mensaje", true);
+    private void mostrarMensajeTempVerde(Frame frame, String mensaje) {
+        Dialog dialogo = new Dialog(frame, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(frame);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(22, 196, 127));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelTitulo.add(lblTitulo);
+
         Label label = new Label(mensaje, Label.CENTER);
         label.setFont(new Font("Arial", Font.PLAIN, 16));
         dialogo.add(label);
-        dialogo.setSize(300, 100);
-        dialogo.setLocationRelativeTo(frame);
 
-        dialogo.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                dialogo.setVisible(false);
-                dialogo.dispose();
-            }
-        });
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
         dialogo.setVisible(true);
     }
 
-    private void mostrarMensajeTempError(Frame frame, String mensaje) {
-        Dialog dialogo = new Dialog(frame, "Mensaje", true);
-        Label label = new Label(mensaje, Label.CENTER);
-        label.setFont(new Font("Arial", Font.PLAIN, 16));
-        dialogo.add(label);
-        dialogo.setSize(300, 100);
+    private void mostrarMensajeTempAmarillo(String mensaje) {
+        Dialog dialogo = new Dialog(frame, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
         dialogo.setLocationRelativeTo(frame);
 
-        dialogo.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                dialogo.setVisible(false);
-                dialogo.dispose();
-            }
-        });
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(255, 233, 154));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private void mostrarMensajeTempRojo(String mensaje) {
+        Dialog dialogo = new Dialog(frame, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(frame);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(220, 53, 69));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(Color.WHITE);
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
         dialogo.setVisible(true);
     }
 

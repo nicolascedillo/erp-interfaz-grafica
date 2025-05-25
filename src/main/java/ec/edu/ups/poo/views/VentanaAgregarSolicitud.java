@@ -19,6 +19,7 @@ public class VentanaAgregarSolicitud extends Frame {
     private TextField txtEmpleado, txtIDSol, txtComentario, txtIDDetalle, txtCantidad, txtObservacion;
     private Choice choiceProductos, choiceDia, choiceMes, choiceAnio;
     private boolean generada;
+    private int contadorDetalles = 0;
 
     public VentanaAgregarSolicitud(List<SolicitudCompra> solicitudes, List<Producto> productos, Empleado empleadoLogueado, String id) {
         this.productos = productos;
@@ -35,10 +36,14 @@ public class VentanaAgregarSolicitud extends Frame {
         panelSuperior.add(titulo);
 
         Button botonSalir = new Button("Salir");
-        botonSalir.addActionListener(e -> {
-            dispose();
-            new VentanaMenu();
+        botonSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new VentanaMenu();
+            }
         });
+
         panelSuperior.add(botonSalir);
         panelSuperior.setPreferredSize(new Dimension(750, 50));
         add(panelSuperior);
@@ -103,6 +108,7 @@ public class VentanaAgregarSolicitud extends Frame {
         Panel panelID = new Panel(new FlowLayout(FlowLayout.CENTER));
         txtIDDetalle = new TextField(10);
         panelID.add(txtIDDetalle);
+        txtIDDetalle.setEditable(false);
         panelDetalle.add(panelID);
 
         Panel panelProductos = new Panel(new FlowLayout(FlowLayout.CENTER));
@@ -134,6 +140,7 @@ public class VentanaAgregarSolicitud extends Frame {
         Button btnGuardarSolicitud = new Button("Guardar Solicitud");
         Button btnNuevaSolicitud = new Button("Nueva Solicitud");
         generada = false;
+        contadorDetalles = 0;
 
         btnGuardarDetalle.setEnabled(false);
         btnNuevoDetalle.setEnabled(false);
@@ -156,9 +163,11 @@ public class VentanaAgregarSolicitud extends Frame {
         btnGuardarDetalle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+
                 if (txtIDDetalle.getText().isEmpty() || choiceProductos.getSelectedIndex() == 0
                         || txtCantidad.getText().isEmpty() || txtObservacion.getText().isEmpty()) {
-                    mostrarMensajeTemp("Todos los campos son obligatorios");
+                    mostrarMensajeTempAmarillo("Todos los campos son obligatorios");
                     return;
                 }
                 Producto producto = productos.get(choiceProductos.getSelectedIndex() - 1);
@@ -174,9 +183,18 @@ public class VentanaAgregarSolicitud extends Frame {
 
                     productoConIva.setFestividad(feriadoCorrespondiente);
                 }
+
+                String cantidadStr = txtCantidad.getText().trim();
+
+                if (!cantidadStr.matches("\\d+")) {
+                    mostrarMensajeTempAmarillo("La cantidad debe ser un número entero");
+                    return;
+                }
+
                 solicitudes.getLast().addDetalle(txtIDDetalle.getText(),producto,
                         Integer.parseInt(txtCantidad.getText()), txtObservacion.getText());
-                mostrarMensajeTemp("Detalle guardado exitosamente");
+
+                mostrarMensajeTempVerde("Detalle guardado exitosamente");
                 deshabilitarCamposDetalle();
                 btnNuevaSolicitud.setEnabled(true);
                 btnGuardarDetalle.setEnabled(false);
@@ -187,18 +205,26 @@ public class VentanaAgregarSolicitud extends Frame {
         btnNuevaSolicitud.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                limpiarCamposDetalle();
+                txtIDDetalle.setText("");
+                limpiarCamposSolicitud();
                 deshabilitarCamposDetalle();
+                btnNuevaSolicitud.setEnabled(false);
+                btnNuevoDetalle.setEnabled(false);
+                btnGuardarDetalle.setEnabled(false);
+                btnGuardarSolicitud.setEnabled(true);
             }
         });
 
         btnNuevoDetalle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                limpiarCampos();
-                choiceProductos.select(0);
+                txtIDDetalle.setText(generarSiguienteIdDetalle());
+                limpiarCamposDetalle();
                 habilitarCamposDetalle();
                 btnGuardarDetalle.setEnabled(true);
                 btnNuevoDetalle.setEnabled(false);
+                btnNuevaSolicitud.setEnabled(false);
             }
         });
 
@@ -208,7 +234,7 @@ public class VentanaAgregarSolicitud extends Frame {
 
                 if (txtIDSol.getText().isEmpty() || choiceDia.getSelectedIndex() == 0 || choiceMes.getSelectedIndex() == 0
                         || choiceAnio.getSelectedIndex() == 0 ) {
-                    mostrarMensajeTemp("Todos los campos son obligatorios");
+                    mostrarMensajeTempAmarillo("Todos los campos son obligatorios");
                     return;
                 }
 
@@ -223,11 +249,16 @@ public class VentanaAgregarSolicitud extends Frame {
                 GregorianCalendar fecha = new GregorianCalendar(anio, mes, dia);
 
                 solicitudes.add(new SolicitudCompra(idSolicitud, fecha, comentario, empleado, EstadoSolicitud.SOLICITADA));
-                mostrarMensajeTemp("Solicitud guardada exitosamente");
-                mostrarMensajeTemp("Ahora puede agregar detalles a la solicitud");
+                mostrarMensajeTempVerde("Solicitud guardada exitosamente");
+                mostrarMensajeTempVerde("Ahora puede agregar detalles a la solicitud");
                 generada = true;
+                contadorDetalles = 0;
+                txtIDDetalle.setText(generarSiguienteIdDetalle());
+
                 btnGuardarDetalle.setEnabled(true);
-                btnNuevoDetalle.setEnabled(true);
+                btnNuevoDetalle.setEnabled(false);
+                btnGuardarDetalle.setEnabled(true);
+                btnNuevoDetalle.setEnabled(false);
                 btnGuardarSolicitud.setEnabled(false);
                 habilitarCamposDetalle();
             }
@@ -236,10 +267,18 @@ public class VentanaAgregarSolicitud extends Frame {
         setVisible(true);
     }
 
-    private void limpiarCampos() {
-        txtIDDetalle.setText("");
+    private void limpiarCamposDetalle() {
         txtObservacion.setText("");
         txtCantidad.setText("");
+        choiceProductos.select(0);
+    }
+
+    public void limpiarCamposSolicitud() {
+        txtIDSol.setText(generarSiguienteIdSolicitudCompra());
+        txtComentario.setText("");
+        choiceDia.select(0);
+        choiceMes.select(0);
+        choiceAnio.select(0);
     }
 
     private void mostrarMensajeTemp(String mensaje) {
@@ -266,6 +305,109 @@ public class VentanaAgregarSolicitud extends Frame {
         dialogo.setVisible(true);
     }
 
+    private void mostrarMensajeTempRojo(String mensaje) {
+        Dialog dialogo = new Dialog(this, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(this);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(220, 53, 69));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(Color.WHITE);
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private void mostrarMensajeTempAmarillo(String mensaje) {
+        Dialog dialogo = new Dialog(this, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(this);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(255, 233, 154));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private void mostrarMensajeTempVerde(String mensaje) {
+        Dialog dialogo = new Dialog(this, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(this);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(22, 196, 127));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
     private void deshabilitarCamposDetalle(){
         txtCantidad.setEnabled(false);
         txtIDDetalle.setEnabled(false);
@@ -279,11 +421,11 @@ public class VentanaAgregarSolicitud extends Frame {
         txtObservacion.setEnabled(true);
     }
 
-    private String generarSiguienteIdDetalle(SolicitudCompra solicitud) {
+    private String generarSiguienteIdSolicitudCompra() {
         int max = 0;
-        for (DetalleSolicitud detalle : solicitud.getDetalles()) {
-            String id = detalle.getId();
-            if (id.startsWith("DS-")) {
+        for (SolicitudCompra sC : Datos.getSolicitudes()) {
+            String id = sC.getId();
+            if (id.startsWith("SC-")) {
                 try {
                     int num = Integer.parseInt(id.substring(3));
                     if (num > max) {
@@ -292,6 +434,12 @@ public class VentanaAgregarSolicitud extends Frame {
                 } catch (NumberFormatException ignored) {}
             }
         }
-        return String.format("DS-%03d", max + 1);
+        return String.format("SC-%03d", max + 1);
+    }
+
+    private String generarSiguienteIdDetalle() {
+        contadorDetalles++;
+        return String.format("DS-%03d", contadorDetalles);
     }
 }
+
