@@ -1,6 +1,7 @@
 package ec.edu.ups.poo.views;
 
 import ec.edu.ups.poo.models.Datos;
+import ec.edu.ups.poo.models.Producto;
 import ec.edu.ups.poo.models.Provedor;
 import java.awt.*;
 import java.awt.event.*;
@@ -19,20 +20,21 @@ public class VentanaAgregarProveedor extends Frame {
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
-        Panel panelSuperior = new Panel(new BorderLayout());
+        Panel panelSuperior = new Panel(new FlowLayout(FlowLayout.CENTER));
 
         Label titulo = new Label("Registro de Proveedores", Label.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 22));
-        panelSuperior.add(titulo, BorderLayout.CENTER);
+        panelSuperior.add(titulo);
 
-        Panel panelBotonSalir = new Panel(new FlowLayout(FlowLayout.RIGHT));
         Button botonSalir = new Button("Salir");
-        botonSalir.addActionListener(e -> {
-            new VentanaMenu();
-            dispose();
+        botonSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                VentanaMenu ventanaMenu = new VentanaMenu();
+            }
         });
-        panelBotonSalir.add(botonSalir);
-        panelSuperior.add(panelBotonSalir, BorderLayout.EAST);
+        panelSuperior.add(botonSalir);
 
         add(panelSuperior, BorderLayout.NORTH);
 
@@ -71,13 +73,40 @@ public class VentanaAgregarProveedor extends Frame {
         Panel panelBotones = new Panel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         panelBotones.setPreferredSize(new Dimension(800, 60));
 
-        Button btnCrearProveedor = new Button("Crear Proveedor");
+        Button btnCrearProveedor = new Button("Guardar Proveedor");
         btnCrearProveedor.setPreferredSize(new Dimension(180, 35));
         panelBotones.add(btnCrearProveedor);
+
+        Button btnNuevoProvedor = new Button("Nuevo Proveedor");
+        btnNuevoProvedor.setPreferredSize(new Dimension(180, 35));
+        panelBotones.add(btnNuevoProvedor);
+        btnNuevoProvedor.setEnabled(false);
 
         Button btnAgregarProducto = new Button("Agregar Producto");
         btnAgregarProducto.setPreferredSize(new Dimension(180, 35));
         panelBotones.add(btnAgregarProducto);
+        btnAgregarProducto.setEnabled(false);
+
+        btnNuevoProvedor.addActionListener(e -> {
+
+            txtRuc.setText("");
+            txtNombre.setText("");
+            txtApellido.setText("");
+            txtTelefono.setText("");
+            txtDireccion.setText("");
+            txtCorreo.setText("");
+
+            txtRuc.setEditable(true);
+            txtNombre.setEditable(true);
+            txtApellido.setEditable(true);
+            txtTelefono.setEditable(true);
+            txtDireccion.setEditable(true);
+            txtCorreo.setEditable(true);
+
+            btnNuevoProvedor.setEnabled(false);
+            btnAgregarProducto.setEnabled(false);
+            btnCrearProveedor.setEnabled(true);
+        });
 
         add(panelBotones, BorderLayout.SOUTH);
 
@@ -95,6 +124,16 @@ public class VentanaAgregarProveedor extends Frame {
                 return;
             }
 
+            if (!ruc.matches("\\d+")) {
+                mostrarMensajeTemp("El RUC debe contener solo números");
+                return;
+            }
+
+            if (!telefono.matches("\\d+")) {
+                mostrarMensajeTemp("El teléfono debe contener solo números");
+                return;
+            }
+
             for (Provedor p : Datos.getProvedores()) {
                 if (p.getId().equals(ruc)) {
                     mostrarMensajeTemp("Ya existe un proveedor con ese RUC");
@@ -107,15 +146,31 @@ public class VentanaAgregarProveedor extends Frame {
             rucActual = ruc;
 
             mostrarMensajeTemp("Proveedor agregado correctamente");
-            limpiarCampos();
+
+            txtRuc.setEditable(false);
+            txtNombre.setEditable(false);
+            txtApellido.setEditable(false);
+            txtTelefono.setEditable(false);
+            txtDireccion.setEditable(false);
+            txtCorreo.setEditable(false);
+
+            btnCrearProveedor.setEnabled(false);
+            btnNuevoProvedor.setEnabled(true);
+            btnAgregarProducto.setEnabled(true);
+
         });
 
+
         btnAgregarProducto.addActionListener(e -> {
+            String idGenerado = generarSiguienteIdProducto(Datos.getProductos());
             if (rucActual != null) {
-                new VentanaAgregarProductoParaProveedor(rucActual);
+                new VentanaAgregarProductoParaProveedor(rucActual,idGenerado);
             } else {
                 mostrarMensajeTemp("Primero cree un proveedor para asociar el producto");
             }
+            btnAgregarProducto.setEnabled(false);
+            btnNuevoProvedor.setEnabled(false);
+            dispose();
         });
 
         addWindowListener(new WindowAdapter() {
@@ -125,15 +180,6 @@ public class VentanaAgregarProveedor extends Frame {
         });
 
         setVisible(true);
-    }
-
-    private void limpiarCampos() {
-        txtRuc.setText("");
-        txtNombre.setText("");
-        txtApellido.setText("");
-        txtTelefono.setText("");
-        txtDireccion.setText("");
-        txtCorreo.setText("");
     }
 
     private void mostrarMensajeTemp(String mensaje) {
@@ -153,5 +199,21 @@ public class VentanaAgregarProveedor extends Frame {
         dialogo.add(panelMensaje, BorderLayout.CENTER);
         dialogo.add(panelBoton, BorderLayout.SOUTH);
         dialogo.setVisible(true);
+    }
+
+    private String generarSiguienteIdProducto(List<Producto> productos) {
+        int max = 0;
+        for (Producto p : Datos.getProductos()) {
+            String id = p.getId();
+            if (id.startsWith("PD-")) {
+                try {
+                    int num = Integer.parseInt(id.substring(3));
+                    if (num > max) {
+                        max = num;
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return String.format("PD-%03d", max + 1);
     }
 }

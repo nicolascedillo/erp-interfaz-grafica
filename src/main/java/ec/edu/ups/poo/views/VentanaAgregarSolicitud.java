@@ -2,10 +2,14 @@ package ec.edu.ups.poo.views;
 
 import ec.edu.ups.poo.models.*;
 import ec.edu.ups.poo.models.enums.EstadoSolicitud;
-
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Calendar;
+import java.time.Month;
+import ec.edu.ups.poo.models.enums.Feriado;
 
 public class VentanaAgregarSolicitud extends Frame {
 
@@ -14,8 +18,9 @@ public class VentanaAgregarSolicitud extends Frame {
 
     private TextField txtEmpleado, txtIDSol, txtComentario, txtIDDetalle, txtCantidad, txtObservacion;
     private Choice choiceProductos, choiceDia, choiceMes, choiceAnio;
+    private boolean generada;
 
-    public VentanaAgregarSolicitud(List<SolicitudCompra> solicitudes, List<Producto> productos, Empleado empleadoLogueado) {
+    public VentanaAgregarSolicitud(List<SolicitudCompra> solicitudes, List<Producto> productos, Empleado empleadoLogueado, String id) {
         this.productos = productos;
         this.solicitudes = solicitudes;
 
@@ -38,7 +43,7 @@ public class VentanaAgregarSolicitud extends Frame {
         panelSuperior.setPreferredSize(new Dimension(750, 50));
         add(panelSuperior);
 
-        Panel panelForm = new Panel(new GridLayout(7, 2, 5, 5));
+        Panel panelForm = new Panel(new GridLayout(8, 2, 5, 5));
         panelForm.setPreferredSize(new Dimension(700, 200));
 
         panelForm.add(new Label("Empleado solicitante:"));
@@ -47,8 +52,9 @@ public class VentanaAgregarSolicitud extends Frame {
         panelForm.add(txtEmpleado);
 
         panelForm.add(new Label("ID Solicitud:"));
-        txtIDSol = new TextField();
+        txtIDSol = new TextField(id);
         panelForm.add(txtIDSol);
+        txtIDSol.setEditable(false);
 
         panelForm.add(new Label("Día:"));
         choiceDia = new Choice();
@@ -80,6 +86,9 @@ public class VentanaAgregarSolicitud extends Frame {
 
         panelForm.add(new Label("--------------------------------------------------------------------------------------"));
         panelForm.add(new Label("--------------------------------------------------------------------------------------"));
+
+        panelForm.add(new Label("Detalles de la Solicitud",Font.BOLD));
+        panelForm.add(new Label(""));
 
         add(panelForm);
 
@@ -123,60 +132,105 @@ public class VentanaAgregarSolicitud extends Frame {
         Button btnGuardarDetalle = new Button("Guardar Detalle");
         Button btnNuevoDetalle = new Button("Nuevo Detalle");
         Button btnGuardarSolicitud = new Button("Guardar Solicitud");
+        Button btnNuevaSolicitud = new Button("Nueva Solicitud");
+        generada = false;
+
+        btnGuardarDetalle.setEnabled(false);
+        btnNuevoDetalle.setEnabled(false);
+        btnNuevaSolicitud.setEnabled(false);
+
+        deshabilitarCamposDetalle();
 
         btnGuardarDetalle.setPreferredSize(new Dimension(140, 30));
         btnNuevoDetalle.setPreferredSize(new Dimension(140, 30));
         btnGuardarSolicitud.setPreferredSize(new Dimension(140, 30));
+        btnNuevaSolicitud.setPreferredSize(new Dimension(140, 30));
 
         panelBotones.add(btnGuardarDetalle);
         panelBotones.add(btnNuevoDetalle);
         panelBotones.add(btnGuardarSolicitud);
+        panelBotones.add(btnNuevaSolicitud);
 
         add(panelBotones);
 
-        btnGuardarDetalle.addActionListener(e -> {
-            if (txtIDDetalle.getText().isEmpty() || choiceProductos.getSelectedIndex() == 0
-                    || txtCantidad.getText().isEmpty() || txtObservacion.getText().isEmpty()) {
-                mostrarMensajeTemp("Todos los campos son obligatorios");
-                return;
+        btnGuardarDetalle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (txtIDDetalle.getText().isEmpty() || choiceProductos.getSelectedIndex() == 0
+                        || txtCantidad.getText().isEmpty() || txtObservacion.getText().isEmpty()) {
+                    mostrarMensajeTemp("Todos los campos son obligatorios");
+                    return;
+                }
+                Producto producto = productos.get(choiceProductos.getSelectedIndex() - 1);
+                GregorianCalendar fechaSolicitud = solicitudes.getLast().getFecha();
+                if (producto instanceof ProductoConIva) {
+                    ProductoConIva productoConIva = (ProductoConIva) producto;
+
+                    int mesSolicitud = fechaSolicitud.get(Calendar.MONTH) + 1;
+                    int diaSolicitud = fechaSolicitud.get(Calendar.DAY_OF_MONTH);
+
+                    Month mesEnum = Month.of(mesSolicitud);
+                    Feriado feriadoCorrespondiente = Feriado.obtenerFeriado(mesEnum, diaSolicitud);
+
+                    productoConIva.setFestividad(feriadoCorrespondiente);
+                }
+                solicitudes.getLast().addDetalle(txtIDDetalle.getText(),producto,
+                        Integer.parseInt(txtCantidad.getText()), txtObservacion.getText());
+                mostrarMensajeTemp("Detalle guardado exitosamente");
+                deshabilitarCamposDetalle();
+                btnNuevaSolicitud.setEnabled(true);
+                btnGuardarDetalle.setEnabled(false);
+                btnNuevoDetalle.setEnabled(true);
             }
-            mostrarMensajeTemp("Detalle guardado exitosamente");
-            choiceProductos.setEnabled(false);
-            txtIDDetalle.setEnabled(false);
-            txtObservacion.setEnabled(false);
-            txtCantidad.setEnabled(false);
         });
 
-        btnNuevoDetalle.addActionListener(e -> {
-            limpiarCampos();
-            choiceProductos.select(0);
-            choiceProductos.setEnabled(true);
-            txtIDDetalle.setEnabled(true);
-            txtObservacion.setEnabled(true);
-            txtCantidad.setEnabled(true);
+        btnNuevaSolicitud.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deshabilitarCamposDetalle();
+            }
         });
 
-        btnGuardarSolicitud.addActionListener(e -> {
-            if (txtIDSol.getText().isEmpty() || choiceDia.getSelectedIndex() == 0 || choiceMes.getSelectedIndex() == 0
-                    || choiceAnio.getSelectedIndex() == 0 || txtIDDetalle.getText().isEmpty()
-                    || choiceProductos.getSelectedIndex() == 0 || txtCantidad.getText().isEmpty()
-                    || txtObservacion.getText().isEmpty()) {
-                mostrarMensajeTemp("Todos los campos son obligatorios");
-                return;
+        btnNuevoDetalle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiarCampos();
+                choiceProductos.select(0);
+                habilitarCamposDetalle();
+                btnGuardarDetalle.setEnabled(true);
+                btnNuevoDetalle.setEnabled(false);
             }
+        });
 
-            String idSolicitud = txtIDSol.getText();
-            String comentario = txtComentario.getText();
-            Empleado empleado = empleadoLogueado;
+        btnGuardarSolicitud.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            int anio = Integer.parseInt(choiceAnio.getSelectedItem());
-            int mes = Integer.parseInt(choiceMes.getSelectedItem()) - 1;
-            int dia = Integer.parseInt(choiceDia.getSelectedItem());
+                if (txtIDSol.getText().isEmpty() || choiceDia.getSelectedIndex() == 0 || choiceMes.getSelectedIndex() == 0
+                        || choiceAnio.getSelectedIndex() == 0 ) {
+                    mostrarMensajeTemp("Todos los campos son obligatorios");
+                    return;
+                }
 
-            GregorianCalendar fecha = new GregorianCalendar(anio, mes, dia);
+                String idSolicitud = txtIDSol.getText();
+                String comentario = txtComentario.getText();
+                Empleado empleado = empleadoLogueado;
 
-            solicitudes.add(new SolicitudCompra(idSolicitud, fecha, comentario, empleado, EstadoSolicitud.SOLICITADA));
-            mostrarMensajeTemp("Solicitud guardada exitosamente");
+                int anio = Integer.parseInt(choiceAnio.getSelectedItem());
+                int mes = Integer.parseInt(choiceMes.getSelectedItem()) - 1;
+                int dia = Integer.parseInt(choiceDia.getSelectedItem());
+
+                GregorianCalendar fecha = new GregorianCalendar(anio, mes, dia);
+
+                solicitudes.add(new SolicitudCompra(idSolicitud, fecha, comentario, empleado, EstadoSolicitud.SOLICITADA));
+                mostrarMensajeTemp("Solicitud guardada exitosamente");
+                mostrarMensajeTemp("Ahora puede agregar detalles a la solicitud");
+                generada = true;
+                btnGuardarDetalle.setEnabled(true);
+                btnNuevoDetalle.setEnabled(true);
+                btnGuardarSolicitud.setEnabled(false);
+                habilitarCamposDetalle();
+            }
         });
 
         setVisible(true);
@@ -199,11 +253,45 @@ public class VentanaAgregarSolicitud extends Frame {
 
         Panel panelBoton = new Panel();
         Button btnAceptar = new Button("Aceptar");
-        btnAceptar.addActionListener(e -> dialogo.dispose());
+        btnAceptar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialogo.dispose();
+            }
+        });
         panelBoton.add(btnAceptar);
 
         dialogo.add(panelMensaje, BorderLayout.CENTER);
         dialogo.add(panelBoton, BorderLayout.SOUTH);
         dialogo.setVisible(true);
+    }
+
+    private void deshabilitarCamposDetalle(){
+        txtCantidad.setEnabled(false);
+        txtIDDetalle.setEnabled(false);
+        choiceProductos.setEnabled(false);
+        txtObservacion.setEnabled(false);
+    }
+    private void habilitarCamposDetalle(){
+        txtCantidad.setEnabled(true);
+        txtIDDetalle.setEnabled(true);
+        choiceProductos.setEnabled(true);
+        txtObservacion.setEnabled(true);
+    }
+
+    private String generarSiguienteIdDetalle(SolicitudCompra solicitud) {
+        int max = 0;
+        for (DetalleSolicitud detalle : solicitud.getDetalles()) {
+            String id = detalle.getId();
+            if (id.startsWith("DS-")) {
+                try {
+                    int num = Integer.parseInt(id.substring(3));
+                    if (num > max) {
+                        max = num;
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return String.format("DS-%03d", max + 1);
     }
 }

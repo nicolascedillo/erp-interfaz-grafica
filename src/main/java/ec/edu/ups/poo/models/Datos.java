@@ -112,6 +112,8 @@ public class Datos {
         productos.add(producto);
     }
 
+
+
     public static List<Provedor> getProvedores() {
         return provedores;
     }
@@ -124,19 +126,11 @@ public class Datos {
         return productos;
     }
 
-    public static Empleado getNicolas() {
-        return new Datos().nicolas;
-    }
-    public static Empleado getMateo() {
-        return new Datos().mateo;
-    }
+    public static Empleado getNicolas() {return new Datos().nicolas;}
+    public static Empleado getMateo() {return new Datos().mateo;}
 
-    public static Empleado getEmpleadoLogueado() {
-        return empleadoLogueado;
-    }
+    public static Empleado getEmpleadoLogueado() {return empleadoLogueado;}
 
-    public static void setEmpleadoLogueado(Empleado empleado) {
-        empleadoLogueado = empleado;
-    }
+    public static void setEmpleadoLogueado(Empleado empleado) {empleadoLogueado = empleado;}
 
 }

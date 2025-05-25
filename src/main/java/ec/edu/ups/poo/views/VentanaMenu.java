@@ -2,6 +2,7 @@ package ec.edu.ups.poo.views;
 
 import ec.edu.ups.poo.models.Datos;
 import ec.edu.ups.poo.models.Producto;
+import ec.edu.ups.poo.models.SolicitudCompra;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,7 +47,7 @@ public class VentanaMenu extends Frame {
         btnRegistrarSolicitud.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VentanaAgregarSolicitud ventanaAgregarSolicitud = new VentanaAgregarSolicitud(Datos.getSolicitudes(), Datos.getProductos(), Datos.getEmpleadoLogueado());
+                VentanaAgregarSolicitud ventanaAgregarSolicitud = new VentanaAgregarSolicitud(Datos.getSolicitudes(), Datos.getProductos(), Datos.getEmpleadoLogueado(), generarSiguienteIdSolicitudCompra());
                 dispose();
             }
         });
@@ -188,6 +189,7 @@ public class VentanaMenu extends Frame {
         add(panelCentro, BorderLayout.CENTER);
 
         setVisible(true);
+
     }
 
     private String generarSiguienteIdProducto() {
@@ -205,4 +207,21 @@ public class VentanaMenu extends Frame {
         }
         return String.format("PD-%03d", max + 1);
     }
+
+    private String generarSiguienteIdSolicitudCompra() {
+        int max = 0;
+        for (SolicitudCompra sC : Datos.getSolicitudes()) {
+            String id = sC.getId();
+            if (id.startsWith("SC-")) {
+                try {
+                    int num = Integer.parseInt(id.substring(3));
+                    if (num > max) {
+                        max = num;
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return String.format("SC-%03d", max + 1);
+    }
+
 }

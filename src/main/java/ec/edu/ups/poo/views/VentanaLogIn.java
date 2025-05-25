@@ -85,22 +85,22 @@ public class VentanaLogIn extends Frame {
         return false;
     }
 
-    private void mostrarMensajeTemp(String mensaje){
-        Dialog dialogo = new Dialog(this, "Error", true);
-        Label label = new Label(mensaje, Label.CENTER);
-        label.setFont(new Font("Arial", Font.PLAIN, 16));
-        dialogo.add(label);
-        dialogo.setSize(300, 100);
+    private void mostrarMensajeTemp(String mensaje) {
+        Dialog dialogo = new Dialog(this, "Mensaje", true);
+        dialogo.setLayout(new BorderLayout(10, 10));
+        dialogo.setSize(350, 120);
         dialogo.setLocationRelativeTo(this);
 
-        dialogo.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                dialogo.setVisible(false);
-                dialogo.dispose();
-            }
-        });
+        Panel panelMensaje = new Panel();
+        panelMensaje.add(new Label(mensaje, Label.CENTER));
+
+        Panel panelBoton = new Panel();
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
         dialogo.setVisible(true);
     }
-
 }

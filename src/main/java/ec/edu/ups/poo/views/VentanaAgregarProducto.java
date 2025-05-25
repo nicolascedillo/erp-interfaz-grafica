@@ -82,13 +82,14 @@ public class VentanaAgregarProducto extends Frame {
 
         Panel panelBoton = new Panel(new FlowLayout(FlowLayout.CENTER));
 
-        Button btnRegistrar = new Button("Registrar Producto");
+        Button btnRegistrar = new Button("Guardar Producto");
         btnRegistrar.setPreferredSize(new Dimension(180, 30));
         panelBoton.add(btnRegistrar);
 
         Button btnNuevoProducto = new Button("Nuevo Producto");
         btnNuevoProducto.setPreferredSize(new Dimension(180, 30));
         panelBoton.add(btnNuevoProducto);
+        btnNuevoProducto.setEnabled(false);
 
         panelForm.add(panelBoton);
 
@@ -106,6 +107,8 @@ public class VentanaAgregarProducto extends Frame {
             txtPrecioUnitario.setText("");
             txtMarca.setText("");
             choiceProvedor.select(0);
+            btnNuevoProducto.setEnabled(false);
+            btnRegistrar.setEnabled(true);
         });
 
 
@@ -196,6 +199,9 @@ public class VentanaAgregarProducto extends Frame {
             txtPrecioUnitario.setEditable(false);
             txtMarca.setEditable(false);
             choiceProvedor.setEnabled(false);
+
+            btnRegistrar.setEnabled(false);
+            btnNuevoProducto.setEnabled(true);
 
         });
 

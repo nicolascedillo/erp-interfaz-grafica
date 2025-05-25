@@ -1,6 +1,7 @@
 package ec.edu.ups.poo.views;
 
 import ec.edu.ups.poo.models.DetalleSolicitud;
+import ec.edu.ups.poo.models.ProductoConIva;
 import ec.edu.ups.poo.models.Provedor;
 import ec.edu.ups.poo.models.SolicitudCompra;
 
@@ -14,7 +15,7 @@ public class VentanaListarSolicitud {
     public VentanaListarSolicitud(List<SolicitudCompra> solicitudes) {
 
         Frame frame = new Frame("Lista de Solicitudes");
-        frame.setSize(800, 600);
+        frame.setSize(800, 650);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
@@ -74,7 +75,6 @@ public class VentanaListarSolicitud {
             for (DetalleSolicitud detalle: solicitud.getDetalles()) {
 
                 panel.add(new Label(cont + " ---Id:"));
-                //Atributos Detalles
                 TextField txtIdDetalle = new TextField(String.valueOf(detalle.getId()));
                 txtIdDetalle.setEditable(false);
                 panel.add(txtIdDetalle);
@@ -94,10 +94,18 @@ public class VentanaListarSolicitud {
                 txtObservacion.setEditable(false);
                 panel.add(txtObservacion);
 
-                panel.add(new Label(cont + " ---Iva:"));
-                TextField txtIvaDetalle = new TextField(String.valueOf(detalle.getIVAdetalle()));
-                txtIvaDetalle.setEditable(false);
-                panel.add(txtIvaDetalle);
+                if (detalle.getItemProducto() instanceof ProductoConIva){
+                    ProductoConIva productoConIva = (ProductoConIva) detalle.getItemProducto();
+                    panel.add(new Label(cont + " ---IVA:" + productoConIva.getFestividad().getFecha()));
+                    TextField txtIva = new TextField(String.valueOf(detalle.getIVAdetalle()));
+                    txtIva.setEditable(false);
+                    panel.add(txtIva);
+                } else {
+                    panel.add(new Label(cont + " ---IVA:"));
+                    TextField txtIva = new TextField("0");
+                    txtIva.setEditable(false);
+                    panel.add(txtIva);
+                }
 
                 panel.add(new Label(cont + " ---SubTotal:"));
                 TextField txtSubTotalDetalle = new TextField(String.valueOf(detalle.getSubTotalDetalle()));

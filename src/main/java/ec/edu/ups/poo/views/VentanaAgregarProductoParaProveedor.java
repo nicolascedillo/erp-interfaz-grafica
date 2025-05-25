@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class VentanaAgregarProductoParaProveedor extends Frame {
 
-    public VentanaAgregarProductoParaProveedor(String ruc) {
+    public VentanaAgregarProductoParaProveedor(String ruc, String idGenerado) {
         setTitle("Agregar Producto para Proveedor");
         setSize(800, 400);
         setLayout(new BorderLayout(10, 10));
@@ -22,6 +22,7 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
         Panel panelBotonSalir = new Panel(new FlowLayout(FlowLayout.RIGHT));
         Button botonSalir = new Button("Salir");
         botonSalir.addActionListener(e -> {
+            new VentanaMenu();
             dispose();
         });
         panelBotonSalir.add(botonSalir);
@@ -45,8 +46,9 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
         panelForm.add(txtCategoria);
 
         panelForm.add(new Label("ID:"));
-        TextField txtId = new TextField();
+        TextField txtId = new TextField(idGenerado);
         panelForm.add(txtId);
+        txtId.setEditable(false);
 
         panelForm.add(new Label("Nombre:"));
         TextField txtNombre = new TextField();
@@ -63,16 +65,19 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
         panelForm.add(new Label("Proveedor (RUC):"));
         TextField txtRucProveedor = new TextField(ruc);
         txtRucProveedor.setEditable(false);
-        txtRucProveedor.setBackground(Color.LIGHT_GRAY);
         panelForm.add(txtRucProveedor);
 
         panelForm.add(new Label(""));
 
         Panel panelBoton = new Panel(new FlowLayout(FlowLayout.CENTER));
-        Button btnRegistrar = new Button("Registrar Producto");
+        Button btnRegistrar = new Button("Guardar Producto");
         btnRegistrar.setPreferredSize(new Dimension(180, 30));
         panelBoton.add(btnRegistrar);
-        panelForm.add(panelBoton);
+
+        Button btnNuevo = new Button("Nuevo Producto");
+        btnNuevo.setPreferredSize(new Dimension(180, 30));
+        panelBoton.add(btnNuevo);
+        btnNuevo.setEnabled(false);
 
         panelCentro.add(panelForm);
         add(panelCentro, BorderLayout.CENTER);
@@ -90,8 +95,31 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
                 return;
             }
 
-            if (!idStr.matches("\\d+") || !precioStr.matches("[\\d.,]+")) {
-                mostrarMensajeTemp("ID y Precio deben ser numéricos");
+
+            // Validar que precio
+            String precioStrAux = precioStr.replace(',', '.');
+
+            boolean esPrecioValido = true;
+            int contadorPuntos = 0;
+
+            for (int i = 0; i < precioStrAux.length(); i++) {
+                char c = precioStrAux.charAt(i);
+                if (Character.isDigit(c)) {
+                    continue;
+                } else if (c == '.') {
+                    contadorPuntos++;
+                    if (contadorPuntos > 1) {
+                        esPrecioValido = false;
+                        break;
+                    }
+                } else {
+                    esPrecioValido = false;
+                    break;
+                }
+            }
+
+            if (!esPrecioValido) {
+                mostrarMensajeTemp("El precio debe ser numérico");
                 return;
             }
 
@@ -108,20 +136,20 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
                 return;
             }
 
-            String id = idStr;
-            double precioUnitario = Double.parseDouble(precioStr.replace(",", "."));
+            double precioUnitario = Double.parseDouble(precioStrAux);
 
             Producto producto;
+
             switch (categoria) {
                 case "Comida":
                 case "Primera_necesidad":
                 case "Agricola":
                 case "Medicina":
                 case "Escolar":
-                    producto = new ProductoSinIva(id, nombre, precioUnitario, marca, "El producto no agrava IVA");
+                    producto = new ProductoSinIva(idStr, nombre, precioUnitario, marca, "El producto no agrava IVA");
                     break;
                 default:
-                    producto = new ProductoConIva(id, nombre, precioUnitario, marca, Feriado.NO_FERIADO);
+                    producto = new ProductoConIva(idStr, nombre, precioUnitario, marca, Feriado.NO_FERIADO);
                     break;
             }
 
@@ -129,12 +157,36 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
             proveedor.addProducto(producto);
 
             mostrarMensajeTemp("Producto agregado correctamente al proveedor");
+
+            txtCategoria.setEditable(false);
+            txtNombre.setEditable(false);
+            txtPrecioUnitario.setEditable(false);
+            txtMarca.setEditable(false);
+
+            btnNuevo.setEnabled(true);
+            btnRegistrar.setEnabled(false);
+
+        });
+
+        btnNuevo.addActionListener(e -> {
+
+            txtCategoria.setEditable(true);
+            txtNombre.setEditable(true);
+            txtPrecioUnitario.setEditable(true);
+            txtMarca.setEditable(true);
+
             txtCategoria.setText("");
-            txtId.setText("");
             txtNombre.setText("");
             txtPrecioUnitario.setText("");
             txtMarca.setText("");
+            txtId.setText(generarSiguienteIdProducto());
+
+            btnRegistrar.setEnabled(true);
+            btnNuevo.setEnabled(false);
+
         });
+
+        panelForm.add(panelBoton);
 
         setVisible(true);
     }
@@ -156,5 +208,21 @@ public class VentanaAgregarProductoParaProveedor extends Frame {
         dialogo.add(panelMensaje, BorderLayout.CENTER);
         dialogo.add(panelBoton, BorderLayout.SOUTH);
         dialogo.setVisible(true);
+    }
+
+    private String generarSiguienteIdProducto() {
+        int max = 0;
+        for (Producto p : Datos.getProductos()) {
+            String id = p.getId();
+            if (id.startsWith("PD-")) {
+                try {
+                    int num = Integer.parseInt(id.substring(3));
+                    if (num > max) {
+                        max = num;
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return String.format("PD-%03d", max + 1);
     }
 }

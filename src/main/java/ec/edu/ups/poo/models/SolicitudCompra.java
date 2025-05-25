@@ -60,6 +60,10 @@ public class SolicitudCompra implements Calculable {
         calcularSubTotal();
     }
 
+    public void setDetalles(DetalleSolicitud detalles) {
+        this.detalles.add(detalles);
+    }
+
     public List<DetalleSolicitud> getDetalles() {
         return detalles;
     }
