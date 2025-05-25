@@ -60,7 +60,7 @@ public class VentanaCambiarEstadoSolicitud {
                 String id = txtId.getText().trim();
 
                 if (id.isEmpty()) {
-                    mostrarMensajeTempAmarillo("Por favor ingrese un ID válido.");
+                    mostrarMensajeTempAmarillo(frame,"Por favor ingrese un ID válido.");
                     return;
                 }
 
@@ -178,7 +178,20 @@ public class VentanaCambiarEstadoSolicitud {
                             String nuevoEstado = choiceEstado.getSelectedItem();
                             encontrado.setEstado(EstadoSolicitud.valueOf(nuevoEstado.toUpperCase()));
                             txtEstado.setText(nuevoEstado);
-                            mostrarMensajeTempVerde(frame, "Estado cambiado a: " + nuevoEstado);
+                            switch (nuevoEstado) {
+                                case "SOLICITADA":
+                                    mostrarMensajeTempAzul(frame, "Estado cambiado a: " + nuevoEstado);
+                                    break;
+                                case "EN_REVISION":
+                                    mostrarMensajeTempAmarillo(frame, "Estado cambiado a: " + nuevoEstado);
+                                    break;
+                                case "APROVADA":
+                                    mostrarMensajeTempVerde(frame, "Estado cambiado a: " + nuevoEstado);
+                                    break;
+                                case "RECHAZADA":
+                                    mostrarMensajeTempRojo(frame, "Estado cambiado a: " + nuevoEstado);
+                                    break;
+                            }
                         }
                     });
 
@@ -188,7 +201,7 @@ public class VentanaCambiarEstadoSolicitud {
                     frame.revalidate();
 
                 } else {
-                    mostrarMensajeTempRojo("No se encontró la solicitud con ID: " + id);
+                    mostrarMensajeTempRojo(frame,"No se encontró la solicitud con ID: " + id);
                     frame.revalidate();
                 }
             }
@@ -242,7 +255,7 @@ public class VentanaCambiarEstadoSolicitud {
         dialogo.setVisible(true);
     }
 
-    private void mostrarMensajeTempAmarillo(String mensaje) {
+    private void mostrarMensajeTempAmarillo(Frame frame, String mensaje) {
         Dialog dialogo = new Dialog(frame, "Alerta", true);
         dialogo.setSize(400, 200);
         dialogo.setLayout(new BorderLayout());
@@ -276,7 +289,7 @@ public class VentanaCambiarEstadoSolicitud {
         dialogo.setVisible(true);
     }
 
-    private void mostrarMensajeTempRojo(String mensaje) {
+    private void mostrarMensajeTempRojo(Frame frame, String mensaje) {
         Dialog dialogo = new Dialog(frame, "Alerta", true);
         dialogo.setSize(400, 200);
         dialogo.setLayout(new BorderLayout());
@@ -284,6 +297,41 @@ public class VentanaCambiarEstadoSolicitud {
 
         Panel panelTitulo = new Panel();
         panelTitulo.setBackground(new Color(220, 53, 69));
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label lblTitulo = new Label("¡ ATENCION !");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(Color.WHITE);
+        panelTitulo.add(lblTitulo);
+
+        Panel panelMensaje = new Panel();
+        panelMensaje.setBackground(Color.WHITE);
+        panelMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMensaje.add(lblMensaje);
+
+        Panel panelBoton = new Panel();
+        panelBoton.setBackground(Color.WHITE);
+        Button btnAceptar = new Button("Aceptar");
+        btnAceptar.setPreferredSize(new Dimension(100, 35));
+        btnAceptar.addActionListener(e -> dialogo.dispose());
+        panelBoton.add(btnAceptar);
+
+        dialogo.add(panelTitulo, BorderLayout.NORTH);
+        dialogo.add(panelMensaje, BorderLayout.CENTER);
+        dialogo.add(panelBoton, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private void mostrarMensajeTempAzul(Frame frame, String mensaje) {
+        Dialog dialogo = new Dialog(frame, "Alerta", true);
+        dialogo.setSize(400, 200);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setLocationRelativeTo(frame);
+
+        Panel panelTitulo = new Panel();
+        panelTitulo.setBackground(new Color(84, 9, 218));
         panelTitulo.setLayout(new FlowLayout(FlowLayout.CENTER));
         Label lblTitulo = new Label("¡ ATENCION !");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
